@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Added CardDescription
 import { simplifyAndTranslate } from "@/ai/flows/simplify-and-translate";
 import { suggestInputText } from "@/ai/flows/suggest-input-text";
 import { useToast } from "@/hooks/use-toast";
@@ -36,6 +36,9 @@ const languages = [
   { value: "Japanese", label: "Japanese" },
   { value: "Mandarin Chinese", label: "Mandarin Chinese" },
   { value: "Hindi", label: "Hindi" },
+  { value: "Portuguese", label: "Portuguese" },
+  { value: "Russian", label: "Russian" },
+  { value: "Arabic", label: "Arabic" },
 ];
 
 const formSchema = z.object({
@@ -48,7 +51,7 @@ const formSchema = z.object({
 });
 
 type SimplificationFormProps = {
-  onResult: (result: { simplifiedText: string; translatedText: string } | null) => void;
+  onResult: (result: { simplifiedText: string; translatedText: string } | null, text?: string, lang?: string) => void; // Pass text/lang back up
 };
 
 export function SimplificationForm({ onResult }: SimplificationFormProps) {
@@ -66,10 +69,10 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      onResult(null); // Clear previous results
+      onResult(null, values.text, values.targetLanguage); // Clear previous results and pass inputs
       try {
         const result = await simplifyAndTranslate(values);
-        onResult(result);
+        onResult(result); // Update with actual result
         toast({
           title: "Success!",
           description: "Text simplified and translated.",
@@ -81,7 +84,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
           title: "Error",
           description: "Failed to simplify and translate text. Please try again.",
         });
-        onResult(null);
+        onResult(null); // Reset on error
       }
     });
   }
@@ -91,6 +94,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
       try {
         const { suggestedText } = await suggestInputText();
         form.setValue("text", suggestedText);
+        form.trigger("text"); // Trigger validation after setting value
         toast({
           title: "Suggestion Loaded",
           description: "Example text added to the input area.",
@@ -107,9 +111,12 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
   }
 
   return (
-    <Card className="w-full shadow-lg border border-border/50">
-      <CardHeader>
-        <CardTitle className="text-2xl font-semibold text-center text-foreground">Enter Text to Simplify & Translate</CardTitle>
+    <Card className="w-full shadow-lg border border-border/70 bg-card"> {/* Adjusted border opacity */}
+      <CardHeader className="text-center pb-4"> {/* Centered header, reduced bottom padding */}
+        <CardTitle className="text-2xl font-semibold text-foreground">Simplify & Translate Text</CardTitle>
+        <CardDescription className="text-muted-foreground pt-1">
+            Enter your text below and select a target language.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -119,11 +126,11 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
               name="text"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-muted-foreground">Your Text</FormLabel>
+                  <FormLabel className="text-sm font-medium text-foreground">Your Text</FormLabel> {/* Slightly bolder label */}
                   <FormControl>
                     <Textarea
-                      placeholder="Paste or type your text here..."
-                      className="min-h-[150px] resize-y bg-card border-input focus:border-primary focus:ring-primary transition-colors duration-200 ease-in-out"
+                      placeholder="Paste or type complex text here..."
+                      className="min-h-[150px] resize-y bg-background border-input focus:border-primary focus:ring-2 focus:ring-primary/30 transition-colors duration-200 ease-in-out shadow-inner" // Added shadow-inner
                       {...field}
                     />
                   </FormControl>
@@ -138,11 +145,11 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
                 name="targetLanguage"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel className="text-muted-foreground">Target Language</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">Target Language</FormLabel>
                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-card border-input focus:border-primary focus:ring-primary transition-colors duration-200 ease-in-out">
-                           <Languages className="mr-2 h-4 w-4 opacity-50"/>
+                        <SelectTrigger className="bg-background border-input focus:border-primary focus:ring-2 focus:ring-primary/30 transition-colors duration-200 ease-in-out shadow-sm"> {/* Added shadow-sm */}
+                           <Languages className="mr-2 h-4 w-4 text-muted-foreground"/> {/* Muted icon color */}
                           <SelectValue placeholder="Select a language" />
                         </SelectTrigger>
                       </FormControl>
@@ -163,12 +170,12 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
                 variant="outline"
                 onClick={handleSuggestText}
                 disabled={isSuggesting}
-                className="w-full sm:w-auto transition-all duration-200 ease-in-out hover:bg-secondary/80"
+                className="w-full sm:w-auto transition-all duration-200 ease-in-out hover:bg-secondary hover:border-primary/30 shadow-sm border-input" // Adjusted hover and border
               >
                 {isSuggesting ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                 ) : (
-                  <Sparkles className="h-4 w-4 mr-2" />
+                  <Sparkles className="h-4 w-4 mr-2 text-accent" /> /* Accent color for icon */
                 )}
                 Suggest Text
               </Button>
@@ -179,7 +186,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-105"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-[1.02] focus:ring-4 focus:ring-primary/40 shadow-md" // Enhanced button style
             >
               {isPending ? (
                 <>

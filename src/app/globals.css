@@ -3,79 +3,79 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 39 100% 95%; /* Lighter Peach */
-    --foreground: 180 10% 10%; /* Dark Teal/Black */
-    --card: 240 67% 97%; /* Soft Lavender */
-    --card-foreground: 180 10% 10%; /* Dark Teal/Black */
-    --popover: 240 67% 97%; /* Soft Lavender */
-    --popover-foreground: 180 10% 10%; /* Dark Teal/Black */
-    --primary: 180 100% 25%; /* Deep Teal */
+    --background: 210 40% 98%; /* Lighter, slightly cooler background */
+    --foreground: 215 25% 15%; /* Darker, slightly muted foreground */
+    --card: 0 0% 100%; /* Pure white card background */
+    --card-foreground: 215 25% 15%; /* Darker foreground for cards */
+    --popover: 0 0% 100%; /* Pure white popover */
+    --popover-foreground: 215 25% 15%; /* Darker foreground for popovers */
+    --primary: 190 95% 45%; /* Slightly brighter, more vibrant Teal */
     --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 240 60% 92%; /* Lighter Soft Lavender */
-    --secondary-foreground: 180 100% 15%; /* Darker Teal */
-    --muted: 240 60% 95%; /* Lighter Soft Lavender */
-    --muted-foreground: 180 10% 40%; /* Grayish Teal */
-    --accent: 180 100% 25%; /* Deep Teal */
+    --secondary: 210 40% 94%; /* Lighter, cooler secondary */
+    --secondary-foreground: 190 90% 30%; /* Darker, saturated Teal */
+    --muted: 210 40% 94%; /* Consistent with secondary */
+    --muted-foreground: 215 15% 50%; /* Softer muted text */
+    --accent: 30 95% 60%; /* Warmer accent (Peach/Orange) */
     --accent-foreground: 0 0% 100%; /* White */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 20% 90%; /* Light Lavender/Gray */
-    --input: 240 20% 94%; /* Lighter Lavender/Gray */
-    --ring: 180 100% 25%; /* Deep Teal */
-    --chart-1: 180 76% 61%;
+    --border: 210 40% 90%; /* Lighter border */
+    --input: 210 40% 96%; /* Slightly lighter input */
+    --ring: 190 95% 50%; /* Brighter Teal for focus rings */
+    --chart-1: 190 76% 61%;
     --chart-2: 240 58% 39%;
-    --chart-3: 39 74% 66%;
+    --chart-3: 30 80% 60%; /* Updated accent */
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 240 67% 97%; /* Soft Lavender */
-    --sidebar-foreground: 180 10% 10%; /* Dark Teal/Black */
-    --sidebar-primary: 180 100% 25%; /* Deep Teal */
-    --sidebar-primary-foreground: 0 0% 100%; /* White */
-    --sidebar-accent: 240 60% 92%; /* Lighter Soft Lavender */
-    --sidebar-accent-foreground: 180 100% 15%; /* Darker Teal */
-    --sidebar-border: 240 20% 90%; /* Light Lavender/Gray */
-    --sidebar-ring: 180 100% 25%; /* Deep Teal */
+    --radius: 0.75rem; /* Increased border radius */
+    --sidebar-background: 210 40% 96%; /* Sidebar matching input/secondary */
+    --sidebar-foreground: 215 25% 15%;
+    --sidebar-primary: 190 95% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 95% 60%; /* Updated accent */
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 210 40% 90%;
+    --sidebar-ring: 190 95% 50%;
   }
   .dark {
     /* Define dark theme colors based on the primary/accent if needed, or keep similar */
-    --background: 180 10% 10%; /* Dark Teal/Black */
-    --foreground: 0 0% 98%; /* White */
-    --card: 180 15% 15%; /* Darker Teal */
-    --card-foreground: 0 0% 98%; /* White */
-    --popover: 180 15% 15%; /* Darker Teal */
-    --popover-foreground: 0 0% 98%; /* White */
-    --primary: 180 100% 35%; /* Brighter Deep Teal */
-    --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 240 10% 25%; /* Dark Lavender */
-    --secondary-foreground: 0 0% 98%; /* White */
-    --muted: 180 10% 20%; /* Dark Grayish Teal */
-    --muted-foreground: 0 0% 63.9%; /* Lighter Gray */
-    --accent: 180 100% 35%; /* Brighter Deep Teal */
-    --accent-foreground: 0 0% 100%; /* White */
-    --destructive: 0 62.8% 30.6%;
+    --background: 215 28% 17%; /* Dark blue-gray background */
+    --foreground: 210 40% 98%; /* Light foreground */
+    --card: 215 30% 22%; /* Slightly lighter card */
+    --card-foreground: 210 40% 98%;
+    --popover: 215 30% 22%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 190 90% 55%; /* Brighter Teal for dark mode */
+    --primary-foreground: 215 20% 10%; /* Dark text on primary */
+    --secondary: 215 25% 25%; /* Darker secondary */
+    --secondary-foreground: 210 40% 90%; /* Lighter secondary text */
+    --muted: 215 25% 25%;
+    --muted-foreground: 215 15% 65%; /* Lighter muted text */
+    --accent: 30 90% 65%; /* Brighter accent for dark mode */
+    --accent-foreground: 215 20% 10%; /* Dark text on accent */
+    --destructive: 0 62.8% 50.6%; /* Adjusted destructive */
     --destructive-foreground: 0 0% 98%;
-    --border: 180 10% 25%; /* Dark Grayish Teal */
-    --input: 180 10% 25%; /* Dark Grayish Teal */
-    --ring: 180 100% 35%; /* Brighter Deep Teal */
-    --chart-1: 180 70% 50%;
+    --border: 215 20% 30%; /* Softer border */
+    --input: 215 20% 30%;
+    --ring: 190 90% 60%; /* Brighter ring */
+    --chart-1: 190 70% 50%;
     --chart-2: 240 60% 45%;
-    --chart-3: 39 80% 55%;
+    --chart-3: 30 80% 55%;
     --chart-4: 43 65% 60%;
     --chart-5: 27 75% 55%;
-    --sidebar-background: 180 15% 15%; /* Darker Teal */
-    --sidebar-foreground: 0 0% 98%; /* White */
-    --sidebar-primary: 180 100% 35%; /* Brighter Deep Teal */
-    --sidebar-primary-foreground: 0 0% 100%; /* White */
-    --sidebar-accent: 240 10% 25%; /* Dark Lavender */
-    --sidebar-accent-foreground: 0 0% 98%; /* White */
-    --sidebar-border: 180 10% 25%; /* Dark Grayish Teal */
-    --sidebar-ring: 180 100% 35%; /* Brighter Deep Teal */
+    --sidebar-background: 215 30% 22%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 190 90% 55%;
+    --sidebar-primary-foreground: 215 20% 10%;
+    --sidebar-accent: 30 90% 65%;
+    --sidebar-accent-foreground: 215 20% 10%;
+    --sidebar-border: 215 20% 30%;
+    --sidebar-ring: 190 90% 60%;
   }
 }
 
@@ -85,15 +85,16 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1; /* Enable nice font features */
   }
 }
 
 /* Add subtle animation for loading */
 @keyframes pulse-bg {
-  0%, 100% { background-color: hsl(var(--muted) / 0.5); }
-  50% { background-color: hsl(var(--muted) / 0.8); }
+  0%, 100% { background-color: hsl(var(--muted) / 0.6); } /* Slightly more subtle */
+  50% { background-color: hsl(var(--muted) / 0.9); }
 }
 
 .animate-pulse-bg {
-  animation: pulse-bg 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-bg 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
