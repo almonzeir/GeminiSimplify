@@ -38,7 +38,7 @@ const languages = [
   { value: "Hindi", label: "Hindi" },
   { value: "Portuguese", label: "Portuguese" },
   { value: "Russian", label: "Russian" },
-  { value: "Arabic", label: "Arabic" },
+  { value: "Arabic", label: "Arabic (Sudanese)" }, // Updated label
 ];
 
 const formSchema = z.object({

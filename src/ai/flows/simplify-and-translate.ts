@@ -45,6 +45,8 @@ const simplifyAndTranslatePrompt = ai.definePrompt({
 
   Simplify the following text and translate it to {{targetLanguage}}.
 
+  IMPORTANT: If the target language is 'Arabic', translate it specifically into the Sudanese Arabic dialect.
+
   Text: {{{text}}}
 
   Output the simplified and translated text.`,
