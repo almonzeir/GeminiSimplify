@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Loader2, Sparkles, Languages, Wand2 } from "lucide-react"; // Added Wand2
+import { Loader2, Sparkles, Languages, Wand2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -76,7 +76,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
         toast({
           title: "Process Complete",
           description: "Text successfully simplified and translated.",
-          className: "bg-background border-primary futuristic-glow-cyan text-foreground",
+          className: "bg-background border-primary futuristic-glow-primary text-foreground",
         });
       } catch (error) {
         console.error("Simplification failed:", error);
@@ -86,7 +86,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
           description: "Failed to simplify and translate text. Please try again.",
           className: "bg-destructive border-destructive/50 text-destructive-foreground"
         });
-        onResult(null);
+        onResult(null); // Clear result on error
       }
     });
   }
@@ -96,11 +96,11 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
       try {
         const { suggestedText } = await suggestInputText();
         form.setValue("text", suggestedText);
-        form.trigger("text");
+        form.trigger("text"); // Manually trigger validation for the field
         toast({
           title: "Suggestion Loaded",
           description: "Example text populated.",
-           className: "bg-background border-accent futuristic-glow-accent text-foreground",
+           className: "bg-background border-accent futuristic-glow-accent text-foreground", // Use accent color
         });
       } catch (error) {
         console.error("Suggestion failed:", error);
@@ -115,7 +115,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
   }
 
   return (
-    <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-cyan transition-all duration-300 hover:shadow-2xl hover:border-primary/70">
+    <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-primary transition-all duration-300 hover:shadow-2xl hover:border-primary/70">
       <CardHeader className="text-center pb-4 pt-6">
         <div className="flex justify-center items-center mb-2">
             <Wand2 className="h-8 w-8 text-primary text-glow-primary" />
@@ -135,11 +135,11 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
               name="text"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-foreground/80">Input Text Matrix</FormLabel>
+                  <FormLabel className="text-sm font-medium text-foreground/80">Your Text</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Initiate sequence: Paste or type complex text here..."
-                      className="min-h-[160px] resize-y bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-inner placeholder:text-muted-foreground/60 futuristic-glow-cyan focus:futuristic-glow-primary"
+                      placeholder="Paste or type complex text here..."
+                      className="min-h-[160px] resize-y bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-inner placeholder:text-muted-foreground/60 futuristic-glow-primary focus:shadow-md"
                       {...field}
                     />
                   </FormControl>
@@ -154,12 +154,12 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
                 name="targetLanguage"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel className="text-sm font-medium text-foreground/80">Target Language Protocol</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground/80">Target Language</FormLabel>
                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-sm text-foreground futuristic-glow-cyan focus:futuristic-glow-primary">
+                        <SelectTrigger className="bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-sm text-foreground futuristic-glow-primary focus:shadow-md">
                            <Languages className="mr-2 h-4 w-4 text-primary/70"/>
-                          <SelectValue placeholder="Select language vector" />
+                          <SelectValue placeholder="Select language" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="bg-popover border-border/70 text-foreground">
@@ -186,14 +186,14 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
                 ) : (
                   <Sparkles className="h-4 w-4 mr-2" />
                 )}
-                Suggest Text AI
+                Suggest Text
               </Button>
             </div>
 
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:futuristic-glow-cyan"
+              className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:shadow-sm"
             >
               {isPending ? (
                 <>
@@ -201,7 +201,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
                   Processing...
                 </>
               ) : (
-                "Activate Simplification Unit"
+                "Simplify & Translate"
               )}
             </Button>
           </form>

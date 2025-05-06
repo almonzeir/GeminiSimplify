@@ -5,13 +5,13 @@ import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ['latin'],
-  display: 'swap', // Added for better font loading
+  display: 'swap',
   variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
-  title: 'GeminiSimplify', // Updated app name
-  description: 'Simplify and translate text with AI using a futuristic interface.', // Updated description
+  title: 'SaySimple', // Updated app name
+  description: 'Simplify and translate text with AI using a modern, clean interface.', // Updated description
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark"> {/* Set dark theme as default if desired */}
+    <html lang="en" className="dark"> {/* Dark theme is default */}
       <body className={`${inter.variable} antialiased font-sans bg-background text-foreground`}>
         <div className="animated-lines-bg" aria-hidden="true"></div>
         {children}

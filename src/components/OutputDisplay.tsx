@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, AlertTriangle, Loader2, BrainCircuit, Eye } from "lucide-react"; // Added AlertTriangle, Eye
+import { Copy, Check, AlertTriangle, Loader2, BrainCircuit, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { explainSimplification } from "@/ai/flows/explain-simplification";
@@ -24,6 +24,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
   const { toast } = useToast();
 
   useEffect(() => {
+    // Reset explanation when result or loading state changes
     setExplanation(null);
     setShowExplanation(false);
     setIsExplaining(false);
@@ -40,9 +41,9 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
       }, 2000);
 
       toast({ 
-        title: "Data Copied", 
-        description: `${type === 'simplified' ? 'Simplified' : 'Translated'} text secured in clipboard.`,
-        className: "bg-background border-primary futuristic-glow-cyan text-foreground"
+        title: "Copied to Clipboard", 
+        description: `${type === 'simplified' ? 'Simplified' : 'Translated'} text has been copied.`,
+        className: "bg-background border-primary futuristic-glow-primary text-foreground" // Use primary glow
       });
     }).catch(err => {
       console.error("Copy failed:", err);
@@ -56,17 +57,19 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
   };
 
   const handleExplain = async () => {
-    if (!inputText || !targetLanguage || isLoading) return;
+    if (!inputText || !targetLanguage || isLoading || !result) return; // also check for result
     setIsExplaining(true);
     setExplanation(null);
     setShowExplanation(true);
     try {
-      const explanationResult = await explainSimplification({ text: inputText, language: targetLanguage });
+      // Use the simplified text from the current result for explanation, or the original input if specified by design
+      const textToExplain = result.simplifiedText || inputText; // Prefer explaining the simplification of the already simplified text
+      const explanationResult = await explainSimplification({ text: textToExplain, language: targetLanguage });
       setExplanation(explanationResult.explanation);
       toast({
         title: "Explanation Generated",
-        description: "AI analysis of simplification is complete.",
-        className: "bg-background border-accent futuristic-glow-accent text-foreground",
+        description: "AI analysis of the simplification is complete.",
+        className: "bg-background border-accent futuristic-glow-accent text-foreground", // Use accent glow
       });
     } catch (error) {
       console.error("Explanation failed:", error);
@@ -82,16 +85,16 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
     }
   };
 
-  const OutputCard = ({ title, text, copied, onCopy, isLoadingCard, cardGlow }: { title: string; text: string | undefined; copied: boolean; onCopy: () => void; isLoadingCard: boolean; cardGlow: 'cyan' | 'accent' }) => (
-    <Card className={`flex-1 bg-card/60 backdrop-blur-sm border-border/40 shadow-lg transition-all duration-300 ease-in-out min-h-[220px] flex flex-col hover:border-primary/60 ${cardGlow === 'cyan' ? 'futuristic-glow-cyan' : 'futuristic-glow-accent'} hover:shadow-xl`}>
+  const OutputCard = ({ title, text, copied, onCopy, isLoadingCard, cardGlowType }: { title: string; text: string | undefined; copied: boolean; onCopy: () => void; isLoadingCard: boolean; cardGlowType: 'primary' | 'accent' }) => (
+    <Card className={`flex-1 bg-card/60 backdrop-blur-sm border-border/40 shadow-lg transition-all duration-300 ease-in-out min-h-[220px] flex flex-col hover:border-${cardGlowType}/60 ${cardGlowType === 'primary' ? 'futuristic-glow-primary' : 'futuristic-glow-accent'} hover:shadow-xl`}>
       <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
-        <CardTitle className={`text-xl font-semibold ${cardGlow === 'cyan' ? 'text-glow-primary' : 'text-glow-accent'}`}>{title}</CardTitle>
+        <CardTitle className={`text-xl font-semibold ${cardGlowType === 'primary' ? 'text-glow-primary' : 'text-glow-accent'}`}>{title}</CardTitle>
         <Button
           variant="ghost"
           size="icon"
           onClick={onCopy}
           disabled={isLoadingCard || !text}
-          className={`h-9 w-9 text-muted-foreground hover:text-${cardGlow === 'cyan' ? 'primary' : 'accent'} transition-colors duration-200 rounded-full futuristic-glow-${cardGlow === 'cyan' ? 'cyan' : 'accent'}`}
+          className={`h-9 w-9 text-muted-foreground hover:text-${cardGlowType} transition-colors duration-200 rounded-full ${cardGlowType === 'primary' ? 'hover:futuristic-glow-primary' : 'hover:futuristic-glow-accent'}`}
           aria-label={`Copy ${title}`}
         >
           {copied ? <Check className={`h-5 w-5 text-green-400`} /> : <Copy className="h-5 w-5" />}
@@ -109,7 +112,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
             <Eye className="h-12 w-12 text-muted-foreground/30 mb-2" />
-            <p className="text-sm text-muted-foreground/50 italic pt-2">Output matrix awaiting data...</p>
+            <p className="text-sm text-muted-foreground/50 italic pt-2">Output will appear here...</p>
           </div>
         )}
       </CardContent>
@@ -120,20 +123,20 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
     <div className="space-y-8 mt-10 w-full max-w-5xl">
        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
          <OutputCard
-           title="Simplified Text Matrix"
+           title="Simplified Text"
            text={result?.simplifiedText}
            copied={copiedSimplified}
            onCopy={() => result?.simplifiedText && handleCopy(result.simplifiedText, 'simplified')}
            isLoadingCard={isLoading && !result}
-           cardGlow="cyan"
+           cardGlowType="primary" // Primary color for simplified text
          />
          <OutputCard
-           title={`Translated Output (${targetLanguage})`}
+           title={`Translated (${targetLanguage})`}
            text={result?.translatedText}
            copied={copiedTranslated}
            onCopy={() => result?.translatedText && handleCopy(result.translatedText, 'translated')}
            isLoadingCard={isLoading && !result}
-           cardGlow="accent"
+           cardGlowType="accent" // Accent color for translated text
          />
        </div>
 
@@ -143,7 +146,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                 onClick={handleExplain} 
                 variant="outline" 
                 disabled={isExplaining || !inputText || !targetLanguage} 
-                className="transition-all duration-300 ease-in-out hover:bg-secondary/20 border-primary/50 text-primary hover:text-accent hover:border-accent futuristic-glow-cyan hover:futuristic-glow-accent shadow-md group px-6 py-3 text-base"
+                className="transition-all duration-300 ease-in-out hover:bg-secondary/20 border-primary/50 text-primary hover:text-primary hover:border-primary futuristic-glow-primary hover:shadow-md group px-6 py-3 text-base"
               >
                  {isExplaining ? (
                     <>
@@ -151,8 +154,8 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                     </>
                  ) : (
                      <>
-                     <BrainCircuit className="mr-2 h-5 w-5 text-primary group-hover:text-accent transition-colors"/>
-                     Explain Simplification Logic
+                     <BrainCircuit className="mr-2 h-5 w-5 text-primary group-hover:text-primary transition-colors"/>
+                     Explain Simplification
                     </>
                  )}
              </Button>
@@ -160,13 +163,13 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
        )}
 
         {(showExplanation || isExplaining) && (
-         <Card className="bg-card/50 backdrop-blur-sm border-border/40 shadow-xl mt-8 transition-all duration-500 ease-in-out animate-in fade-in slide-in-from-bottom-5 futuristic-glow-accent">
+         <Card className="bg-card/50 backdrop-blur-sm border-border/40 shadow-xl mt-8 transition-all duration-500 ease-in-out animate-in fade-in slide-in-from-bottom-5 futuristic-glow-primary">
            <CardHeader className="pb-3 pt-5 px-5">
-             <CardTitle className="text-xl font-semibold text-glow-accent flex items-center">
+             <CardTitle className="text-xl font-semibold text-glow-primary flex items-center">
                 <BrainCircuit className="mr-3 h-6 w-6" />
-                AI Explanation Core
+                AI Explanation
              </CardTitle>
-             <CardDescription className="text-muted-foreground/80 pt-1">Analysis of the text transformation process.</CardDescription>
+             <CardDescription className="text-muted-foreground/80 pt-1">Analysis of the text transformation.</CardDescription>
            </CardHeader>
            <CardContent className="px-5 pb-5">
              {isExplaining ? (
@@ -187,7 +190,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
              ) : (
                 <div className="flex items-center text-muted-foreground/60 py-2">
                     <AlertTriangle className="mr-2 h-5 w-5" />
-                    <span className="text-base">Explanation data not available or generation failed.</span>
+                    <span className="text-base">Explanation not available or generation failed.</span>
                 </div>
              )}
            </CardContent>
