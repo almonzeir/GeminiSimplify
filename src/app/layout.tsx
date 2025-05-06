@@ -1,20 +1,16 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google'; // Import Inter from next/font/google
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+// Initialize Inter font
+const inter = Inter({
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-inter', // Define CSS variable
 });
 
 export const metadata: Metadata = {
-  title: 'GeminiSimplify',
+  title: 'Saysimple',
   description: 'Simplify and translate text with AI',
 };
 
@@ -25,7 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
+      {/* Apply the font variable to the body */}
+      <body className={`${inter.variable} antialiased font-sans`}>
         {children}
         <Toaster />
       </body>

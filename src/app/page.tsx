@@ -36,7 +36,7 @@ export default function Home() {
           <div className="flex items-center gap-3"> {/* Increased gap */}
             <LogoIcon className="h-8 w-8 text-primary" /> {/* Slightly larger logo */}
             <h1 className="text-2xl font-semibold text-foreground tracking-tight"> {/* Bolder title */}
-              GeminiSimplify
+              Saysimple {/* Updated header title */}
             </h1>
           </div>
           {/* Future placeholder for nav/actions */}
