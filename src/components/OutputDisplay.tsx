@@ -1,31 +1,31 @@
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, AlertTriangle, Loader2, BrainCircuit, Eye } from "lucide-react";
+import { Copy, Check, AlertTriangle, Loader2, BrainCircuit, Eye, HelpCircle, ListChecks } from "lucide-react"; // Added HelpCircle, ListChecks
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { explainSimplification } from "@/ai/flows/explain-simplification";
+import { explainSimplification, ExplainSimplificationOutput } from "@/ai/flows/explain-simplification"; // Import output type
 
 type OutputDisplayProps = {
   result: { simplifiedText: string; translatedText: string } | null;
   isLoading: boolean;
-  inputText: string;
+  inputText: string; // Original input text, keep for potential future use or if needed elsewhere
   targetLanguage: string;
 };
 
 export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: OutputDisplayProps) {
   const [copiedSimplified, setCopiedSimplified] = useState(false);
   const [copiedTranslated, setCopiedTranslated] = useState(false);
-  const [explanation, setExplanation] = useState<string | null>(null);
+  const [explanationOutput, setExplanationOutput] = useState<ExplainSimplificationOutput | null>(null); // Store the full output object
   const [isExplaining, setIsExplaining] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Reset explanation when result or loading state changes
-    setExplanation(null);
+    setExplanationOutput(null);
     setShowExplanation(false);
     setIsExplaining(false);
   }, [result, isLoading]);
@@ -43,7 +43,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
       toast({ 
         title: "Copied to Clipboard", 
         description: `${type === 'simplified' ? 'Simplified' : 'Translated'} text has been copied.`,
-        className: "bg-background border-primary futuristic-glow-primary text-foreground" // Use primary glow
+        className: "bg-background border-primary futuristic-glow-primary text-foreground"
       });
     }).catch(err => {
       console.error("Copy failed:", err);
@@ -57,27 +57,26 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
   };
 
   const handleExplain = async () => {
-    if (!inputText || !targetLanguage || isLoading || !result) return; // also check for result
+    if (!result?.simplifiedText || !targetLanguage || isLoading) return;
     setIsExplaining(true);
-    setExplanation(null);
-    setShowExplanation(true);
+    setExplanationOutput(null);
+    setShowExplanation(true); // Show the section immediately while loading
     try {
-      // Use the simplified text from the current result for explanation, or the original input if specified by design
-      const textToExplain = result.simplifiedText || inputText; // Prefer explaining the simplification of the already simplified text
-      const explanationResult = await explainSimplification({ text: textToExplain, language: targetLanguage });
-      setExplanation(explanationResult.explanation);
+      // Use the simplified text from the current result for explanation
+      const explanationResult = await explainSimplification({ simplifiedText: result.simplifiedText, language: targetLanguage });
+      setExplanationOutput(explanationResult);
       toast({
-        title: "Explanation Generated",
-        description: "AI analysis of the simplification is complete.",
-        className: "bg-background border-accent futuristic-glow-accent text-foreground", // Use accent glow
+        title: "Guidance Generated",
+        description: "AI has provided an explanation and next steps.",
+        className: "bg-background border-accent futuristic-glow-accent text-foreground",
       });
     } catch (error) {
-      console.error("Explanation failed:", error);
-      setExplanation("Error: Failed to generate explanation. Please try again.");
+      console.error("Explanation/Guidance failed:", error);
+      setExplanationOutput({ scenarioExplanation: "Error: Failed to generate guidance. Please try again.", nextSteps: "" });
       toast({ 
         variant: "destructive", 
-        title: "Explanation Error", 
-        description: "Could not generate the explanation.",
+        title: "Guidance Error", 
+        description: "Could not generate the explanation or next steps.",
         className: "bg-destructive border-destructive/50 text-destructive-foreground"
       });
     } finally {
@@ -128,7 +127,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
            copied={copiedSimplified}
            onCopy={() => result?.simplifiedText && handleCopy(result.simplifiedText, 'simplified')}
            isLoadingCard={isLoading && !result}
-           cardGlowType="primary" // Primary color for simplified text
+           cardGlowType="primary"
          />
          <OutputCard
            title={`Translated (${targetLanguage})`}
@@ -136,7 +135,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
            copied={copiedTranslated}
            onCopy={() => result?.translatedText && handleCopy(result.translatedText, 'translated')}
            isLoadingCard={isLoading && !result}
-           cardGlowType="accent" // Accent color for translated text
+           cardGlowType="accent"
          />
        </div>
 
@@ -145,17 +144,17 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
              <Button 
                 onClick={handleExplain} 
                 variant="outline" 
-                disabled={isExplaining || !inputText || !targetLanguage} 
+                disabled={isExplaining || !result?.simplifiedText || !targetLanguage} 
                 className="transition-all duration-300 ease-in-out hover:bg-secondary/20 border-primary/50 text-primary hover:text-primary hover:border-primary futuristic-glow-primary hover:shadow-md group px-6 py-3 text-base"
               >
                  {isExplaining ? (
                     <>
-                     <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Analyzing...
+                     <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Analyzing Situation...
                     </>
                  ) : (
                      <>
-                     <BrainCircuit className="mr-2 h-5 w-5 text-primary group-hover:text-primary transition-colors"/>
-                     Explain Simplification
+                     <HelpCircle className="mr-2 h-5 w-5 text-primary group-hover:text-primary transition-colors"/>
+                     Explain Situation & Get Advice
                     </>
                  )}
              </Button>
@@ -167,30 +166,60 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
            <CardHeader className="pb-3 pt-5 px-5">
              <CardTitle className="text-xl font-semibold text-glow-primary flex items-center">
                 <BrainCircuit className="mr-3 h-6 w-6" />
-                AI Explanation
+                AI Guidance
              </CardTitle>
-             <CardDescription className="text-muted-foreground/80 pt-1">Analysis of the text transformation.</CardDescription>
+             <CardDescription className="text-muted-foreground/80 pt-1">Understanding the situation and suggested next steps.</CardDescription>
            </CardHeader>
-           <CardContent className="px-5 pb-5">
+           <CardContent className="px-5 pb-5 space-y-4">
              {isExplaining ? (
-               <div className="space-y-4 pt-2">
-                 <Skeleton className="h-5 w-full animate-pulse-bg rounded bg-muted/20" />
-                 <Skeleton className="h-5 w-5/6 animate-pulse-bg rounded bg-muted/20" />
-                 <Skeleton className="h-5 w-4/5 animate-pulse-bg rounded bg-muted/20" />
-               </div>
-             ) : explanation ? (
-                explanation.startsWith("Error:") ? (
-                    <div className="flex items-center text-destructive py-2">
-                        <AlertTriangle className="mr-2 h-5 w-5" />
-                        <span className="text-base">{explanation}</span>
+               <>
+                <div>
+                  <div className="flex items-center mb-2">
+                    <HelpCircle className="mr-2 h-5 w-5 text-primary/80"/>
+                    <h4 className="text-lg font-medium text-foreground/90">Scenario Explanation</h4>
+                  </div>
+                  <Skeleton className="h-5 w-full animate-pulse-bg rounded bg-muted/20 mb-1" />
+                  <Skeleton className="h-5 w-5/6 animate-pulse-bg rounded bg-muted/20" />
+                </div>
+                <div>
+                  <div className="flex items-center mb-2">
+                    <ListChecks className="mr-2 h-5 w-5 text-accent/80"/>
+                    <h4 className="text-lg font-medium text-foreground/90">Suggested Next Steps</h4>
+                  </div>
+                  <Skeleton className="h-5 w-full animate-pulse-bg rounded bg-muted/20 mb-1" />
+                  <Skeleton className="h-5 w-3/4 animate-pulse-bg rounded bg-muted/20" />
+                </div>
+               </>
+             ) : explanationOutput ? (
+                <>
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <HelpCircle className="mr-2 h-5 w-5 text-primary/80"/>
+                      <h4 className="text-lg font-medium text-foreground/90">Scenario Explanation</h4>
                     </div>
-                ) : (
-                   <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed">{explanation}</p>
-                )
+                    {explanationOutput.scenarioExplanation.startsWith("Error:") ? (
+                        <div className="flex items-center text-destructive py-2">
+                            <AlertTriangle className="mr-2 h-5 w-5" />
+                            <span className="text-base">{explanationOutput.scenarioExplanation}</span>
+                        </div>
+                    ) : (
+                       <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed">{explanationOutput.scenarioExplanation}</p>
+                    )}
+                  </div>
+                  {explanationOutput.nextSteps && (
+                    <div>
+                      <div className="flex items-center mb-2">
+                        <ListChecks className="mr-2 h-5 w-5 text-accent/80"/>
+                        <h4 className="text-lg font-medium text-foreground/90">Suggested Next Steps</h4>
+                      </div>
+                      <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed">{explanationOutput.nextSteps}</p>
+                    </div>
+                  )}
+                </>
              ) : (
                 <div className="flex items-center text-muted-foreground/60 py-2">
                     <AlertTriangle className="mr-2 h-5 w-5" />
-                    <span className="text-base">Explanation not available or generation failed.</span>
+                    <span className="text-base">Guidance not available or generation failed.</span>
                 </div>
              )}
            </CardContent>
@@ -199,3 +228,4 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
     </div>
   );
 }
+
