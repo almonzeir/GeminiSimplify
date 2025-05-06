@@ -28,6 +28,7 @@ import { simplifyAndTranslate } from "@/ai/flows/simplify-and-translate";
 import { suggestInputText } from "@/ai/flows/suggest-input-text";
 import { useToast } from "@/hooks/use-toast";
 
+// Shared languages list - also used in OutputDisplay.tsx, consider moving to a shared constants file if app grows
 const languages = [
   { value: "English", label: "English" },
   { value: "Spanish", label: "Spanish" },
@@ -39,6 +40,16 @@ const languages = [
   { value: "Portuguese", label: "Portuguese" },
   { value: "Russian", label: "Russian" },
   { value: "Arabic", label: "Arabic (Sudanese)" },
+  { value: "Korean", label: "Korean" },
+  { value: "Italian", label: "Italian" },
+  { value: "Dutch", label: "Dutch" },
+  { value: "Turkish", label: "Turkish" },
+  { value: "Polish", label: "Polish" },
+  { value: "Swedish", label: "Swedish" },
+  { value: "Vietnamese", label: "Vietnamese" },
+  { value: "Thai", label: "Thai" },
+  { value: "Indonesian", label: "Indonesian" },
+  { value: "Swahili", label: "Swahili" },
 ];
 
 const formSchema = z.object({
@@ -72,7 +83,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
       onResult(null, values.text, values.targetLanguage);
       try {
         const result = await simplifyAndTranslate(values);
-        onResult(result);
+        onResult(result, values.text, values.targetLanguage); // Pass text and lang along with result
         toast({
           title: "Process Complete",
           description: "Text successfully simplified and translated.",
@@ -86,7 +97,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
           description: "Failed to simplify and translate text. Please try again.",
           className: "bg-destructive border-destructive/50 text-destructive-foreground"
         });
-        onResult(null); // Clear result on error
+        onResult(null, values.text, values.targetLanguage); // Clear result on error but keep text and lang
       }
     });
   }
