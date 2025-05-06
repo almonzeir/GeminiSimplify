@@ -3,17 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 import { SimplificationForm } from "@/components/SimplificationForm";
 import { OutputDisplay } from "@/components/OutputDisplay";
+import { HistoryPanel } from "@/components/HistoryPanel"; // Import HistoryPanel
 import { LogoIcon } from "@/components/icons/LogoIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight, Languages, Wand2 } from "lucide-react";
+import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight, Languages, Wand2, History as HistoryIcon } from "lucide-react"; // Added HistoryIcon
 import Image from "next/image";
+import type { SimplificationResult, HistoryItem } from "@/lib/types"; // Import shared types
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"; // Import Sheet components
 
-type SimplificationResult = {
-  simplifiedText: string;
-  translatedText: string;
-};
+const LOCAL_STORAGE_HISTORY_KEY = "saySimpleHistory";
 
 // Simulated 3D Hero Element
 const Hero3DElement = () => {
@@ -24,8 +24,8 @@ const Hero3DElement = () => {
       if (!elementRef.current) return;
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
-      const xRotation = (clientY / innerHeight - 0.5) * 30; // Max rotation 15deg
-      const yRotation = (clientX / innerWidth - 0.5) * -30; // Max rotation 15deg
+      const xRotation = (clientY / innerHeight - 0.5) * 15; // Reduced rotation for subtlety
+      const yRotation = (clientX / innerWidth - 0.5) * -15; // Reduced rotation for subtlety
       elementRef.current.style.transform = `translate(-50%, -50%) perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
     };
 
@@ -36,10 +36,9 @@ const Hero3DElement = () => {
   return (
     <div ref={elementRef} className="hero-3d-element">
       <div className="hero-3d-plane">
-        <div className="hero-3d-line line-1"></div>
-        <div className="hero-3d-line line-2"></div>
-        <div className="hero-3d-line line-3"></div>
-        <div className="hero-3d-line line-4"></div>
+        {/* Simplified: Fewer lines, more focus on the plane's material/glow */}
+        <div className="hero-3d-line line-1" style={{ top: '30%', height: '1px', opacity: 0.3 }}></div>
+        <div className="hero-3d-line line-2" style={{ top: '70%', height: '1px', opacity: 0.3 }}></div>
       </div>
     </div>
   );
@@ -56,7 +55,7 @@ const useScrollAnimation = () => {
           }
         });
       },
-      { threshold: 0.1 } // Trigger when 10% of the element is visible
+      { threshold: 0.1 } 
     );
 
     const elements = document.querySelectorAll(".scroll-animate");
@@ -73,14 +72,48 @@ export default function Home() {
   const [inputTextForOutput, setInputTextForOutput] = useState("");
   const [targetLanguageForOutput, setTargetLanguageForOutput] = useState("English");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
+  const [isHistoryPanelOpen, setIsHistoryPanelOpen] = useState(false);
 
-  useScrollAnimation(); // Initialize scroll animations
+
+  useScrollAnimation(); 
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    const storedHistory = localStorage.getItem(LOCAL_STORAGE_HISTORY_KEY);
+    if (storedHistory) {
+      try {
+        setHistoryItems(JSON.parse(storedHistory));
+      } catch (error) {
+        console.error("Failed to parse history from localStorage:", error);
+        setHistoryItems([]);
+      }
+    }
+  }, []);
+
+  const saveHistoryItem = (item: HistoryItem) => {
+    const updatedHistory = [item, ...historyItems].slice(0, 50); // Keep last 50 items
+    setHistoryItems(updatedHistory);
+    localStorage.setItem(LOCAL_STORAGE_HISTORY_KEY, JSON.stringify(updatedHistory));
+  };
 
   const handleResult = (newResult: SimplificationResult | null, text?: string, lang?: string) => {
-    setIsLoading(newResult === null && !!text); // only true loading if text is provided
+    setIsLoading(newResult === null && !!text); 
     setResult(newResult);
     if (text !== undefined) setInputTextForOutput(text);
     if (lang !== undefined) setTargetLanguageForOutput(lang);
+
+    if (newResult && text && lang) {
+      const historyEntry: HistoryItem = {
+        id: Date.now().toString() + Math.random().toString(36).substring(2, 15),
+        timestamp: Date.now(),
+        originalText: text,
+        targetLanguage: lang,
+        simplifiedText: newResult.simplifiedText,
+        translatedText: newResult.translatedText,
+      };
+      saveHistoryItem(historyEntry);
+    }
   };
   
   const scrollToSection = (sectionId: string) => {
@@ -91,11 +124,36 @@ export default function Home() {
     setIsMenuOpen(false);
   };
 
+  const handleSelectHistoryItem = (item: HistoryItem) => {
+    setInputTextForOutput(item.originalText);
+    setTargetLanguageForOutput(item.targetLanguage);
+    setResult({
+      simplifiedText: item.simplifiedText,
+      translatedText: item.translatedText,
+    });
+    setIsLoading(false);
+    setIsHistoryPanelOpen(false); // Close panel after selection
+    // Optionally, scroll to the simplification form
+    scrollToSection('simplify');
+    // Update the form fields if SimplificationForm exposes a method or uses a ref
+    // For simplicity, we'll rely on the user re-triggering if they want to modify the loaded text
+  };
+
+  const handleDeleteHistoryItem = (id: string) => {
+    const updatedHistory = historyItems.filter(item => item.id !== id);
+    setHistoryItems(updatedHistory);
+    localStorage.setItem(LOCAL_STORAGE_HISTORY_KEY, JSON.stringify(updatedHistory));
+  };
+
+  const handleClearHistory = () => {
+    setHistoryItems([]);
+    localStorage.removeItem(LOCAL_STORAGE_HISTORY_KEY);
+  };
+
 
   return (
     <div className="flex flex-col min-h-screen items-center relative overflow-x-hidden bg-background text-foreground">
       
-      {/* Header */}
       <header className="w-full py-4 px-6 md:px-10 fixed top-0 z-50 bg-background/80 backdrop-blur-md shadow-sm">
         <div className="container mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
@@ -104,7 +162,7 @@ export default function Home() {
               SaySimple
             </h1>
           </Link>
-          <nav className="hidden md:flex gap-6 items-center">
+          <nav className="hidden md:flex gap-4 items-center"> {/* Reduced gap for more items */}
             {['hero', 'about', 'services', 'simplify', 'contact'].map((item) => (
               <button
                 key={item}
@@ -114,15 +172,44 @@ export default function Home() {
                 {item === 'hero' ? 'Home' : item}
               </button>
             ))}
-            <Button variant="outline" onClick={() => scrollToSection('simplify')} className="border-primary text-primary hover:bg-primary/10 futuristic-glow-primary">Get Started</Button>
+            <Sheet open={isHistoryPanelOpen} onOpenChange={setIsHistoryPanelOpen}>
+              <SheetTrigger asChild>
+                 <Button variant="outline" className="border-primary/70 text-primary/90 hover:bg-primary/10 futuristic-glow-primary">
+                   <HistoryIcon className="mr-2 h-4 w-4" /> History
+                 </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:max-w-md md:max-w-lg bg-card/95 backdrop-blur-lg border-border/50 text-card-foreground">
+                <HistoryPanel
+                  historyItems={historyItems}
+                  onSelectHistoryItem={handleSelectHistoryItem}
+                  onDeleteHistoryItem={handleDeleteHistoryItem}
+                  onClearHistory={handleClearHistory}
+                />
+              </SheetContent>
+            </Sheet>
+            <Button variant="outline" onClick={() => scrollToSection('simplify')} className="border-accent text-accent hover:bg-accent/10 futuristic-glow-accent">Start Simplifying</Button>
           </nav>
-          <div className="md:hidden">
-            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <div className="md:hidden flex items-center gap-2">
+            <Sheet open={isHistoryPanelOpen} onOpenChange={setIsHistoryPanelOpen}>
+              <SheetTrigger asChild>
+                 <Button variant="ghost" size="icon" aria-label="View History">
+                   <HistoryIcon className="h-5 w-5" />
+                 </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:max-w-xs bg-card/95 backdrop-blur-lg border-border/50 text-card-foreground">
+                 <HistoryPanel
+                  historyItems={historyItems}
+                  onSelectHistoryItem={handleSelectHistoryItem}
+                  onDeleteHistoryItem={handleDeleteHistoryItem}
+                  onClearHistory={handleClearHistory}
+                />
+              </SheetContent>
+            </Sheet>
+            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Open Menu">
               <Menu className="h-6 w-6" />
             </Button>
           </div>
         </div>
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md shadow-lg py-4">
             <nav className="container mx-auto flex flex-col gap-4 px-6">
@@ -135,7 +222,7 @@ export default function Home() {
                   {item === 'hero' ? 'Home' : item}
                 </button>
               ))}
-              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 futuristic-glow-primary">Get Started</Button>
+              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 futuristic-glow-accent">Start Simplifying</Button>
             </nav>
           </div>
         )}
@@ -152,7 +239,7 @@ export default function Home() {
             SaySimple uses advanced AI to make complex text easy to grasp and bridges language barriers effortlessly.
           </p>
           <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={() => scrollToSection('simplify')} className="futuristic-glow-primary text-lg px-8 py-6 group">
+            <Button size="lg" onClick={() => scrollToSection('simplify')} className="futuristic-glow-primary text-lg px-8 py-6 group bg-primary text-primary-foreground hover:bg-primary/90">
               Start Simplifying <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform"/>
             </Button>
             <Button size="lg" variant="outline" onClick={() => scrollToSection('about')} className="text-lg px-8 py-6 border-accent text-accent hover:bg-accent/10 hover:text-accent-foreground futuristic-glow-accent">
@@ -240,7 +327,12 @@ export default function Home() {
                 </p>
             </div>
             <div className="w-full max-w-4xl mx-auto flex flex-col items-center space-y-10 scroll-animate">
-                <SimplificationForm onResult={handleResult} />
+                <SimplificationForm 
+                  onResult={handleResult} 
+                  initialText={inputTextForOutput} 
+                  initialLanguage={targetLanguageForOutput} 
+                  key={`${inputTextForOutput}-${targetLanguageForOutput}`} // Re-render form if loaded from history
+                />
                 {(isLoading || result) && (
                     <OutputDisplay
                         result={result}
@@ -298,7 +390,7 @@ export default function Home() {
                 <Link href="#" aria-label="GitHub" className="text-muted-foreground hover:text-primary transition-colors"><Github className="h-6 w-6"/></Link>
             </div>
             <p className="text-sm text-muted-foreground">
-              Powered by Gemini AI &bull; Crafted with Next.js & ShadCN UI &bull; Design for Clarity
+              Powered by Genkit & Gemini AI &bull; Crafted with Next.js & ShadCN UI &bull; Design for Clarity
             </p>
             <p className="text-xs text-muted-foreground/70 mt-3">
               © {new Date().getFullYear()} SaySimple. All rights reserved.

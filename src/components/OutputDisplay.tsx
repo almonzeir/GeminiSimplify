@@ -15,9 +15,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import type { SimplificationResult } from "@/lib/types";
+
 
 type OutputDisplayProps = {
-  result: { simplifiedText: string; translatedText: string } | null;
+  result: SimplificationResult | null;
   isLoading: boolean;
   inputText: string;
   targetLanguage: string;

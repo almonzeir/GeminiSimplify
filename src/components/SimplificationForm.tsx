@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -27,6 +27,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { simplifyAndTranslate } from "@/ai/flows/simplify-and-translate";
 import { suggestInputText } from "@/ai/flows/suggest-input-text";
 import { useToast } from "@/hooks/use-toast";
+import type { SimplificationResult } from "@/lib/types";
 
 // Shared languages list - also used in OutputDisplay.tsx, consider moving to a shared constants file if app grows
 const languages = [
@@ -62,10 +63,12 @@ const formSchema = z.object({
 });
 
 type SimplificationFormProps = {
-  onResult: (result: { simplifiedText: string; translatedText: string } | null, text?: string, lang?: string) => void;
+  onResult: (result: SimplificationResult | null, text?: string, lang?: string) => void;
+  initialText?: string;
+  initialLanguage?: string;
 };
 
-export function SimplificationForm({ onResult }: SimplificationFormProps) {
+export function SimplificationForm({ onResult, initialText = "", initialLanguage = "English" }: SimplificationFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isSuggesting, startSuggestTransition] = useTransition();
   const { toast } = useToast();
@@ -73,10 +76,18 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      text: "",
-      targetLanguage: "English",
+      text: initialText,
+      targetLanguage: initialLanguage,
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      text: initialText,
+      targetLanguage: initialLanguage,
+    });
+  }, [initialText, initialLanguage, form]);
+
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
@@ -166,7 +177,7 @@ export function SimplificationForm({ onResult }: SimplificationFormProps) {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-sm font-medium text-foreground/80">Target Language</FormLabel>
-                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                     <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-sm text-foreground futuristic-glow-primary focus:shadow-md">
                            <Languages className="mr-2 h-4 w-4 text-primary/70"/>
