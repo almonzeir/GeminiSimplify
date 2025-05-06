@@ -7,7 +7,7 @@ import { LogoIcon } from "@/components/icons/LogoIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight } from "lucide-react";
+import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight, Languages, Wand2 } from "lucide-react";
 import Image from "next/image";
 
 type SimplificationResult = {
@@ -72,7 +72,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputTextForOutput, setInputTextForOutput] = useState("");
   const [targetLanguageForOutput, setTargetLanguageForOutput] = useState("English");
-  const [isMenuOpen, setIsMenuOpen = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useScrollAnimation(); // Initialize scroll animations
 

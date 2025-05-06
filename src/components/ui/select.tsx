@@ -155,4 +155,5 @@ export {
   SelectLabel,
   SelectItem,
   SelectSeparator,
-  SelectScrollUp
+  SelectScrollUpButton as SelectScrollUp
+}
