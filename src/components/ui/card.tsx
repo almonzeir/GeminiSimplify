@@ -9,7 +9,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      "rounded-lg border border-border/30 bg-card/80 backdrop-blur-sm text-card-foreground shadow-md transition-shadow hover:shadow-lg", // Adjusted border, background, shadow
       className
     )}
     {...props}
@@ -29,14 +29,15 @@ const CardHeader = React.forwardRef<
 ))
 CardHeader.displayName = "CardHeader"
 
+// Updated CardTitle to allow div or heading elements via asChild
 const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLHeadingElement, // Changed from div to heading element for semantics
+  React.HTMLAttributes<HTMLHeadingElement> // Changed from div to heading element
 >(({ className, ...props }, ref) => (
-  <div
+  <h3 // Changed from div to h3 for better structure
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-xl font-semibold leading-none tracking-tight", // Adjusted size
       className
     )}
     {...props}
@@ -44,11 +45,12 @@ const CardTitle = React.forwardRef<
 ))
 CardTitle.displayName = "CardTitle"
 
+// Updated CardDescription to allow div or p elements via asChild
 const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLParagraphElement, // Changed from div to p element for semantics
+  React.HTMLAttributes<HTMLParagraphElement> // Changed from div to p element
 >(({ className, ...props }, ref) => (
-  <div
+  <p // Changed from div to p
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props}

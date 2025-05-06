@@ -1,10 +1,9 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, AlertCircle, Loader2, BrainCircuit } from "lucide-react"; // Added Loader2, BrainCircuit
+import { Copy, Check, AlertTriangle, Loader2, BrainCircuit, Eye } from "lucide-react"; // Added AlertTriangle, Eye
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { explainSimplification } from "@/ai/flows/explain-simplification";
@@ -25,7 +24,6 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
   const { toast } = useToast();
 
   useEffect(() => {
-    // Reset explanation when result changes or loading starts
     setExplanation(null);
     setShowExplanation(false);
     setIsExplaining(false);
@@ -33,128 +31,163 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
 
   const handleCopy = (text: string, type: 'simplified' | 'translated') => {
     navigator.clipboard.writeText(text).then(() => {
-      if (type === 'simplified') {
-        setCopiedSimplified(true);
-        setTimeout(() => setCopiedSimplified(false), 2000);
-      } else {
-        setCopiedTranslated(true);
-        setTimeout(() => setCopiedTranslated(false), 2000);
-      }
-      toast({ title: "Copied!", description: `${type === 'simplified' ? 'Simplified' : 'Translated'} text copied to clipboard.` });
+      if (type === 'simplified') setCopiedSimplified(true);
+      else setCopiedTranslated(true);
+      
+      setTimeout(() => {
+        if (type === 'simplified') setCopiedSimplified(false);
+        else setCopiedTranslated(false);
+      }, 2000);
+
+      toast({ 
+        title: "Data Copied", 
+        description: `${type === 'simplified' ? 'Simplified' : 'Translated'} text secured in clipboard.`,
+        className: "bg-background border-primary futuristic-glow-cyan text-foreground"
+      });
     }).catch(err => {
       console.error("Copy failed:", err);
-      toast({ variant: "destructive", title: "Error", description: "Failed to copy text." });
+      toast({ 
+        variant: "destructive", 
+        title: "Copy Error", 
+        description: "Failed to copy text to clipboard.",
+        className: "bg-destructive border-destructive/50 text-destructive-foreground"
+      });
     });
   };
 
   const handleExplain = async () => {
-    if (!inputText || !targetLanguage || isLoading) return; // Also disable if main process is loading
+    if (!inputText || !targetLanguage || isLoading) return;
     setIsExplaining(true);
-    setExplanation(null); // Clear previous explanation
-    setShowExplanation(true); // Show the explanation section immediately with loading state
+    setExplanation(null);
+    setShowExplanation(true);
     try {
       const explanationResult = await explainSimplification({ text: inputText, language: targetLanguage });
       setExplanation(explanationResult.explanation);
+      toast({
+        title: "Explanation Generated",
+        description: "AI analysis of simplification is complete.",
+        className: "bg-background border-accent futuristic-glow-accent text-foreground",
+      });
     } catch (error) {
       console.error("Explanation failed:", error);
-      setExplanation("Failed to generate explanation. Please try again."); // More informative error
-      toast({ variant: "destructive", title: "Explanation Error", description: "Could not generate the explanation." });
+      setExplanation("Error: Failed to generate explanation. Please try again.");
+      toast({ 
+        variant: "destructive", 
+        title: "Explanation Error", 
+        description: "Could not generate the explanation.",
+        className: "bg-destructive border-destructive/50 text-destructive-foreground"
+      });
     } finally {
       setIsExplaining(false);
     }
   };
 
-
-  const OutputCard = ({ title, text, copied, onCopy, isLoading }: { title: string; text: string | undefined; copied: boolean; onCopy: () => void; isLoading: boolean }) => (
-    <Card className="flex-1 bg-card/80 border border-border/50 shadow-md transition-all duration-300 ease-in-out min-h-[200px] flex flex-col"> {/* Added flex flex-col */}
-      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4"> {/* Adjusted padding */}
-        <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle> {/* Increased font weight */}
+  const OutputCard = ({ title, text, copied, onCopy, isLoadingCard, cardGlow }: { title: string; text: string | undefined; copied: boolean; onCopy: () => void; isLoadingCard: boolean; cardGlow: 'cyan' | 'accent' }) => (
+    <Card className={`flex-1 bg-card/60 backdrop-blur-sm border-border/40 shadow-lg transition-all duration-300 ease-in-out min-h-[220px] flex flex-col hover:border-primary/60 ${cardGlow === 'cyan' ? 'futuristic-glow-cyan' : 'futuristic-glow-accent'} hover:shadow-xl`}>
+      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
+        <CardTitle className={`text-xl font-semibold ${cardGlow === 'cyan' ? 'text-glow-primary' : 'text-glow-accent'}`}>{title}</CardTitle>
         <Button
           variant="ghost"
           size="icon"
           onClick={onCopy}
-          disabled={isLoading || !text}
-          className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors duration-200 rounded-full" /* Rounded button */
+          disabled={isLoadingCard || !text}
+          className={`h-9 w-9 text-muted-foreground hover:text-${cardGlow === 'cyan' ? 'primary' : 'accent'} transition-colors duration-200 rounded-full futuristic-glow-${cardGlow === 'cyan' ? 'cyan' : 'accent'}`}
           aria-label={`Copy ${title}`}
         >
-          {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+          {copied ? <Check className={`h-5 w-5 text-green-400`} /> : <Copy className="h-5 w-5" />}
         </Button>
       </CardHeader>
-      <CardContent className="pt-2 px-4 pb-4 flex-1"> {/* Added flex-1 to fill space */}
-        {isLoading ? (
-          <div className="space-y-3 pt-2"> {/* Increased spacing */}
-            <Skeleton className="h-4 w-full animate-pulse-bg rounded" /> {/* Rounded skeleton */}
-            <Skeleton className="h-4 w-5/6 animate-pulse-bg rounded" />
-            <Skeleton className="h-4 w-3/4 animate-pulse-bg rounded" />
+      <CardContent className="pt-2 px-4 pb-4 flex-1">
+        {isLoadingCard ? (
+          <div className="space-y-3 pt-2">
+            <Skeleton className="h-5 w-full animate-pulse-bg rounded bg-muted/20" />
+            <Skeleton className="h-5 w-5/6 animate-pulse-bg rounded bg-muted/20" />
+            <Skeleton className="h-5 w-3/4 animate-pulse-bg rounded bg-muted/20" />
           </div>
         ) : text ? (
-          <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{text}</p> /* Increased line height */
+          <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed">{text}</p>
         ) : (
-          <p className="text-sm text-muted-foreground italic pt-2">Output will appear here...</p>
+          <div className="flex flex-col items-center justify-center h-full">
+            <Eye className="h-12 w-12 text-muted-foreground/30 mb-2" />
+            <p className="text-sm text-muted-foreground/50 italic pt-2">Output matrix awaiting data...</p>
+          </div>
         )}
       </CardContent>
     </Card>
   );
 
   return (
-    <div className="space-y-8 mt-10 w-full"> {/* Increased spacing and margin-top */}
-       <div className="flex flex-col md:flex-row gap-6">
+    <div className="space-y-8 mt-10 w-full max-w-5xl">
+       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
          <OutputCard
-           title="Simplified Text"
+           title="Simplified Text Matrix"
            text={result?.simplifiedText}
            copied={copiedSimplified}
-           onCopy={() => handleCopy(result?.simplifiedText || '', 'simplified')}
-           isLoading={isLoading && !result} // Only show loading skeleton if no result yet
+           onCopy={() => result?.simplifiedText && handleCopy(result.simplifiedText, 'simplified')}
+           isLoadingCard={isLoading && !result}
+           cardGlow="cyan"
          />
          <OutputCard
-           title={`Translated Text (${targetLanguage})`}
+           title={`Translated Output (${targetLanguage})`}
            text={result?.translatedText}
            copied={copiedTranslated}
-           onCopy={() => handleCopy(result?.translatedText || '', 'translated')}
-           isLoading={isLoading && !result}
+           onCopy={() => result?.translatedText && handleCopy(result.translatedText, 'translated')}
+           isLoadingCard={isLoading && !result}
+           cardGlow="accent"
          />
        </div>
 
-      {result && !isLoading && ( // Only show Explain button if result is loaded and not currently loading
-         <div className="text-center pt-2"> {/* Added padding-top */}
-             <Button onClick={handleExplain} variant="outline" disabled={isExplaining || !inputText || !targetLanguage} className="transition-all duration-200 ease-in-out hover:bg-secondary hover:border-primary/30 shadow-sm border-input group"> {/* Added group class */}
+      {result && !isLoading && (
+         <div className="text-center pt-4">
+             <Button 
+                onClick={handleExplain} 
+                variant="outline" 
+                disabled={isExplaining || !inputText || !targetLanguage} 
+                className="transition-all duration-300 ease-in-out hover:bg-secondary/20 border-primary/50 text-primary hover:text-accent hover:border-accent futuristic-glow-cyan hover:futuristic-glow-accent shadow-md group px-6 py-3 text-base"
+              >
                  {isExplaining ? (
                     <>
-                     <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Explanation...
+                     <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Analyzing...
                     </>
                  ) : (
                      <>
-                     <BrainCircuit className="mr-2 h-4 w-4 text-accent group-hover:text-accent-foreground transition-colors"/> {/* Accent icon */}
-                     Explain Simplification
+                     <BrainCircuit className="mr-2 h-5 w-5 text-primary group-hover:text-accent transition-colors"/>
+                     Explain Simplification Logic
                     </>
                  )}
              </Button>
          </div>
        )}
 
-        {/* Explanation Section */}
-        {(showExplanation || isExplaining) && ( // Show card container if explaining or explanation is ready
-         <Card className="bg-secondary/30 border border-border/50 shadow-md mt-6 transition-all duration-500 ease-in-out animate-in fade-in slide-in-from-bottom-5"> {/* Softer background */}
-           <CardHeader className="pb-3 pt-4 px-4">
-             <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                <BrainCircuit className="mr-2 h-5 w-5 text-primary" /> {/* Icon in title */}
-                Explanation
+        {(showExplanation || isExplaining) && (
+         <Card className="bg-card/50 backdrop-blur-sm border-border/40 shadow-xl mt-8 transition-all duration-500 ease-in-out animate-in fade-in slide-in-from-bottom-5 futuristic-glow-accent">
+           <CardHeader className="pb-3 pt-5 px-5">
+             <CardTitle className="text-xl font-semibold text-glow-accent flex items-center">
+                <BrainCircuit className="mr-3 h-6 w-6" />
+                AI Explanation Core
              </CardTitle>
-             <CardDescription className="text-muted-foreground pt-1">How the AI simplified the original text.</CardDescription>
+             <CardDescription className="text-muted-foreground/80 pt-1">Analysis of the text transformation process.</CardDescription>
            </CardHeader>
-           <CardContent className="px-4 pb-4">
+           <CardContent className="px-5 pb-5">
              {isExplaining ? (
-               <div className="space-y-3 pt-2"> {/* Increased spacing */}
-                 <Skeleton className="h-4 w-full animate-pulse-bg rounded" />
-                 <Skeleton className="h-4 w-5/6 animate-pulse-bg rounded" />
-                 <Skeleton className="h-4 w-4/5 animate-pulse-bg rounded" />
+               <div className="space-y-4 pt-2">
+                 <Skeleton className="h-5 w-full animate-pulse-bg rounded bg-muted/20" />
+                 <Skeleton className="h-5 w-5/6 animate-pulse-bg rounded bg-muted/20" />
+                 <Skeleton className="h-5 w-4/5 animate-pulse-bg rounded bg-muted/20" />
                </div>
              ) : explanation ? (
-               <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{explanation}</p> /* Increased line height */
+                explanation.startsWith("Error:") ? (
+                    <div className="flex items-center text-destructive py-2">
+                        <AlertTriangle className="mr-2 h-5 w-5" />
+                        <span className="text-base">{explanation}</span>
+                    </div>
+                ) : (
+                   <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed">{explanation}</p>
+                )
              ) : (
-                <div className="flex items-center text-destructive py-2"> {/* Destructive color for error */}
-                    <AlertCircle className="mr-2 h-4 w-4" />
-                    <span>Explanation could not be generated or is not available.</span>
+                <div className="flex items-center text-muted-foreground/60 py-2">
+                    <AlertTriangle className="mr-2 h-5 w-5" />
+                    <span className="text-base">Explanation data not available or generation failed.</span>
                 </div>
              )}
            </CardContent>

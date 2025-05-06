@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google'; // Import Inter from next/font/google
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
-// Initialize Inter font
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter', // Define CSS variable
+  display: 'swap', // Added for better font loading
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
-  title: 'Saysimple',
-  description: 'Simplify and translate text with AI',
+  title: 'GeminiSimplify', // Updated app name
+  description: 'Simplify and translate text with AI using a futuristic interface.', // Updated description
 };
 
 export default function RootLayout({
@@ -20,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      {/* Apply the font variable to the body */}
-      <body className={`${inter.variable} antialiased font-sans`}>
+    <html lang="en" className="dark"> {/* Set dark theme as default if desired */}
+      <body className={`${inter.variable} antialiased font-sans bg-background text-foreground`}>
+        <div className="animated-lines-bg" aria-hidden="true"></div>
         {children}
         <Toaster />
       </body>

@@ -7,23 +7,30 @@ export function LogoIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5" // Slightly thinner lines for tech look
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}
     >
-      {/* Abstract representation of transformation/simplification */}
-      {/* Layer 1: Complex lines */}
-      <path d="M4 8 L8 12 L4 16" opacity="0.6"/>
-      <path d="M8 6 L12 10 L8 14" opacity="0.6"/>
-      <path d="M12 4 L16 8 L12 12" opacity="0.6"/>
+      {/* Abstract geometric shape representing simplification/transformation */}
+      <defs>
+        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{ stopColor: 'hsl(var(--primary))', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: 'hsl(var(--accent))', stopOpacity: 1 }} />
+        </linearGradient>
+      </defs>
 
-      {/* Layer 2: Simplified line */}
-       <path d="M16 12 L20 16 L16 20" strokeWidth="2.5" className="text-primary"/>
+      {/* Outer frame */}
+      <path d="M12 2 L22 7 L22 17 L12 22 L2 17 L2 7 Z" stroke="url(#logoGradient)" opacity="0.6"/>
 
-       {/* Arrow indicating direction of transformation */}
-       <line x1="10" y1="17" x2="14" y2="17" strokeWidth="1.5" opacity="0.8"/>
-       <polyline points="12 15, 14 17, 12 19" strokeWidth="1.5" opacity="0.8"/>
+      {/* Inner transforming element */}
+      <path d="M6 9 L12 6 L18 9" stroke="hsl(var(--foreground))" opacity="0.8" />
+      <path d="M6 15 L12 18 L18 15" stroke="hsl(var(--primary))" strokeWidth="2" />
+
+      {/* Connection lines */}
+      <line x1="12" y1="6" x2="12" y2="18" stroke="hsl(var(--accent))" opacity="0.5"/>
+      <line x1="6" y1="9" x2="6" y2="15" stroke="hsl(var(--foreground))" opacity="0.4"/>
+      <line x1="18" y1="9" x2="18" y2="15" stroke="hsl(var(--foreground))" opacity="0.4"/>
     </svg>
   );
 }
