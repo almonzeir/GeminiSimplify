@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -24,9 +25,9 @@ const Hero3DElement = () => {
       if (!elementRef.current) return;
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
-      const xRotation = (clientY / innerHeight - 0.5) * 15; // Reduced rotation for subtlety
-      const yRotation = (clientX / innerWidth - 0.5) * -15; // Reduced rotation for subtlety
-      elementRef.current.style.transform = `translate(-50%, -50%) perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+      const xRotation = (clientY / innerHeight - 0.5) * 10; // Reduced rotation
+      const yRotation = (clientX / innerWidth - 0.5) * -10; // Reduced rotation
+      elementRef.current.style.transform = `translate(-50%, -50%) perspective(800px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -36,9 +37,11 @@ const Hero3DElement = () => {
   return (
     <div ref={elementRef} className="hero-3d-element">
       <div className="hero-3d-plane">
-        {/* Simplified: Fewer lines, more focus on the plane's material/glow */}
-        <div className="hero-3d-line line-1" style={{ top: '30%', height: '1px', opacity: 0.3 }}></div>
-        <div className="hero-3d-line line-2" style={{ top: '70%', height: '1px', opacity: 0.3 }}></div>
+        {/* Simplified lines for effect */}
+        <div className="hero-3d-line line-1" style={{ top: '20%', opacity: 0.4 }}></div>
+        <div className="hero-3d-line line-2" style={{ top: '80%', opacity: 0.4 }}></div>
+        <div className="hero-3d-line line-3" style={{ left: '20%', opacity: 0.4, animationDelay: '0.5s' }}></div>
+        <div className="hero-3d-line line-4" style={{ left: '80%', opacity: 0.4, animationDelay: '0.5s' }}></div>
       </div>
     </div>
   );
@@ -400,3 +403,4 @@ export default function Home() {
     </div>
   );
 }
+
