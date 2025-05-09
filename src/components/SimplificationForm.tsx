@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
@@ -29,7 +30,7 @@ import { suggestInputText } from "@/ai/flows/suggest-input-text";
 import { useToast } from "@/hooks/use-toast";
 import type { SimplificationResult } from "@/lib/types";
 
-// Shared languages list
+// Shared languages list with various Arabic dialects
 const languages = [
   { value: "English", label: "English" },
   { value: "Spanish", label: "Spanish" },
@@ -40,7 +41,14 @@ const languages = [
   { value: "Hindi", label: "Hindi" },
   { value: "Portuguese", label: "Portuguese" },
   { value: "Russian", label: "Russian" },
-  { value: "Arabic", label: "Arabic" }, // Updated from "Arabic (Sudanese)"
+  { value: "Arabic (Modern Standard)", label: "Arabic (Modern Standard)" },
+  { value: "Arabic (Egyptian)", label: "Arabic (Egyptian)" },
+  { value: "Arabic (Levantine)", label: "Arabic (Levantine)" },
+  { value: "Arabic (Gulf)", label: "Arabic (Gulf)" },
+  { value: "Arabic (Iraqi)", label: "Arabic (Iraqi)" },
+  { value: "Arabic (Maghrebi)", label: "Arabic (Maghrebi)" },
+  { value: "Arabic (Sudanese)", label: "Arabic (Sudanese)" },
+  { value: "Arabic (Yemeni)", label: "Arabic (Yemeni)" },
   { value: "Korean", label: "Korean" },
   { value: "Italian", label: "Italian" },
   { value: "Dutch", label: "Dutch" },

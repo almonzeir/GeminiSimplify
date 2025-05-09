@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -25,7 +26,7 @@ type OutputDisplayProps = {
   targetLanguage: string;
 };
 
-// Shared languages list
+// Shared languages list with various Arabic dialects
 const languages = [
   { value: "English", label: "English" },
   { value: "Spanish", label: "Spanish" },
@@ -36,7 +37,14 @@ const languages = [
   { value: "Hindi", label: "Hindi" },
   { value: "Portuguese", label: "Portuguese" },
   { value: "Russian", label: "Russian" },
-  { value: "Arabic", label: "Arabic" }, // Updated from "Arabic (Sudanese)"
+  { value: "Arabic (Modern Standard)", label: "Arabic (Modern Standard)" },
+  { value: "Arabic (Egyptian)", label: "Arabic (Egyptian)" },
+  { value: "Arabic (Levantine)", label: "Arabic (Levantine)" },
+  { value: "Arabic (Gulf)", label: "Arabic (Gulf)" },
+  { value: "Arabic (Iraqi)", label: "Arabic (Iraqi)" },
+  { value: "Arabic (Maghrebi)", label: "Arabic (Maghrebi)" },
+  { value: "Arabic (Sudanese)", label: "Arabic (Sudanese)" },
+  { value: "Arabic (Yemeni)", label: "Arabic (Yemeni)" },
   { value: "Korean", label: "Korean" },
   { value: "Italian", label: "Italian" },
   { value: "Dutch", label: "Dutch" },
@@ -62,7 +70,17 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
     setExplanationOutput(null);
     setShowExplanation(false);
     setIsExplaining(false);
-    setSelectedGuidanceLanguage(targetLanguage);
+    // Update guidance language to match the target language if it's a valid option,
+    // otherwise default to English or the first available Arabic dialect.
+    const isValidTargetLang = languages.some(l => l.value === targetLanguage);
+    if (isValidTargetLang) {
+      setSelectedGuidanceLanguage(targetLanguage);
+    } else if (targetLanguage.toLowerCase().includes("arabic")) {
+       setSelectedGuidanceLanguage("Arabic (Modern Standard)"); // Default to MSA if target is generic Arabic
+    }
+     else {
+      setSelectedGuidanceLanguage("English"); // Fallback default
+    }
   }, [result, targetLanguage]);
 
 
