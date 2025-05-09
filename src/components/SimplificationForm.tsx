@@ -29,7 +29,7 @@ import { suggestInputText } from "@/ai/flows/suggest-input-text";
 import { useToast } from "@/hooks/use-toast";
 import type { SimplificationResult } from "@/lib/types";
 
-// Shared languages list - also used in OutputDisplay.tsx, consider moving to a shared constants file if app grows
+// Shared languages list
 const languages = [
   { value: "English", label: "English" },
   { value: "Spanish", label: "Spanish" },
@@ -40,7 +40,7 @@ const languages = [
   { value: "Hindi", label: "Hindi" },
   { value: "Portuguese", label: "Portuguese" },
   { value: "Russian", label: "Russian" },
-  { value: "Arabic", label: "Arabic (Sudanese)" },
+  { value: "Arabic", label: "Arabic" }, // Updated from "Arabic (Sudanese)"
   { value: "Korean", label: "Korean" },
   { value: "Italian", label: "Italian" },
   { value: "Dutch", label: "Dutch" },
@@ -94,7 +94,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
       onResult(null, values.text, values.targetLanguage);
       try {
         const result = await simplifyAndTranslate(values);
-        onResult(result, values.text, values.targetLanguage); // Pass text and lang along with result
+        onResult(result, values.text, values.targetLanguage); 
         toast({
           title: "Process Complete",
           description: "Text successfully simplified and translated.",
@@ -108,7 +108,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
           description: "Failed to simplify and translate text. Please try again.",
           className: "bg-destructive border-destructive/50 text-destructive-foreground"
         });
-        onResult(null, values.text, values.targetLanguage); // Clear result on error but keep text and lang
+        onResult(null, values.text, values.targetLanguage); 
       }
     });
   }
@@ -118,11 +118,11 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
       try {
         const { suggestedText } = await suggestInputText();
         form.setValue("text", suggestedText);
-        form.trigger("text"); // Manually trigger validation for the field
+        form.trigger("text"); 
         toast({
           title: "Suggestion Loaded",
           description: "Example text populated.",
-           className: "bg-background border-accent futuristic-glow-accent text-foreground", // Use accent color
+           className: "bg-background border-accent futuristic-glow-accent text-foreground", 
         });
       } catch (error) {
         console.error("Suggestion failed:", error);

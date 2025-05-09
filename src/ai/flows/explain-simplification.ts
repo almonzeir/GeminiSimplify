@@ -1,4 +1,3 @@
-
 'use server';
 /**
  * @fileOverview AI agent that interprets a simplified text, explains the potential real-world scenario it implies, and suggests next steps.
@@ -13,7 +12,7 @@ import {z} from 'genkit';
 
 const ExplainSimplificationInputSchema = z.object({
   simplifiedText: z.string().describe('The simplified text that implies a real-world situation.'),
-  language: z.string().describe('The target language for the explanation and next steps.'),
+  language: z.string().describe('The target language for the explanation and next steps. Can also specify an Arabic dialect, e.g., "Sudanese Arabic".'),
 });
 export type ExplainSimplificationInput = z.infer<typeof ExplainSimplificationInputSchema>;
 
@@ -38,7 +37,7 @@ export async function explainSimplification(
 }
 
 const explainSimplificationPrompt = ai.definePrompt({
-  name: 'explainSituationalGuidancePrompt', // Renamed for clarity
+  name: 'explainSituationalGuidancePrompt',
   input: {
     schema: ExplainSimplificationInputSchema,
   },
@@ -51,30 +50,27 @@ const explainSimplificationPrompt = ai.definePrompt({
 3. Provide practical, actionable next steps or advice for the user in this situation, also in the target language: {{{language}}}.
 
 Focus on being helpful and providing guidance. Avoid merely rephrasing the text or explaining linguistic changes.
-Think about what this message implies if someone received it in real life. For example, if the text is "Entering this country is difficult. You should return to your country.", it might imply an immigration or border control issue.
+Think about what this message implies if someone received it in real life. For example, if the text is "Entering this country is difficult. You should return to your country.", it might imply an immigration or border control issue. Another example: if the simplified text is "Police need your documents now", it implies an encounter with law enforcement requiring identification, and next steps might involve calmly complying, asking for clarification if needed, and knowing your rights.
 
 Here is the simplified text you need to interpret:
 "{{{simplifiedText}}}"
 
-Target language for your response (explanation and next steps): {{{language}}}
+Target language for your response (explanation and next steps): {{{language}}}.
 
-IMPORTANT: If the target language is 'Arabic', you MUST provide the explanation and next steps in the Sudanese Arabic dialect.
+IMPORTANT - ARABIC LANGUAGE: If the target language '{{{language}}}' is 'Arabic' or specifies an Arabic dialect (e.g., 'Sudanese Arabic', 'Egyptian Arabic', 'Levantine Arabic'), please provide the response in clear, widely understandable Arabic. If '{{{language}}}' explicitly names a specific dialect (e.g., 'Sudanese Arabic'), prioritize using that dialect. If '{{{language}}}' is just 'Arabic', use Modern Standard Arabic (MSA) or a broadly understood colloquial Arabic.
 
 Output the scenario explanation and the next steps. Format next steps clearly, perhaps using bullet points if appropriate (e.g., using '-' or '*' at the start of each step within the string).`,
 });
 
 const explainSimplificationFlow = ai.defineFlow<
-  typeof ExplainSimplificationInputSchema, // Input schema type
-  typeof ExplainSimplificationOutputSchema // Output schema type
+  typeof ExplainSimplificationInputSchema, 
+  typeof ExplainSimplificationOutputSchema
 >({
-  name: 'explainSituationalGuidanceFlow', // Renamed for clarity
+  name: 'explainSituationalGuidanceFlow',
   inputSchema: ExplainSimplificationInputSchema,
   outputSchema: ExplainSimplificationOutputSchema,
 },
 async input => {
-  // The input 'input.simplifiedText' comes from the user (via OutputDisplay component)
-  // The input 'input.language' also comes from the user
   const {output} = await explainSimplificationPrompt(input);
   return output!;
 });
-

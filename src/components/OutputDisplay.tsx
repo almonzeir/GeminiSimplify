@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, AlertTriangle, Loader2, BrainCircuit, Eye, HelpCircle, ListChecks, Languages } from "lucide-react"; // Added HelpCircle, ListChecks, Languages
+import { Copy, Check, AlertTriangle, Loader2, BrainCircuit, Eye, HelpCircle, ListChecks, Languages } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { explainSimplification, ExplainSimplificationOutput } from "@/ai/flows/explain-simplification";
@@ -36,11 +36,17 @@ const languages = [
   { value: "Hindi", label: "Hindi" },
   { value: "Portuguese", label: "Portuguese" },
   { value: "Russian", label: "Russian" },
-  { value: "Arabic", label: "Arabic (Sudanese)" },
+  { value: "Arabic", label: "Arabic" }, // Updated from "Arabic (Sudanese)"
   { value: "Korean", label: "Korean" },
   { value: "Italian", label: "Italian" },
   { value: "Dutch", label: "Dutch" },
-  // Add more languages as needed
+  { value: "Turkish", label: "Turkish" },
+  { value: "Polish", label: "Polish" },
+  { value: "Swedish", label: "Swedish" },
+  { value: "Vietnamese", label: "Vietnamese" },
+  { value: "Thai", label: "Thai" },
+  { value: "Indonesian", label: "Indonesian" },
+  { value: "Swahili", label: "Swahili" },
 ];
 
 export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: OutputDisplayProps) {
@@ -53,7 +59,6 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
   const { toast } = useToast();
 
   useEffect(() => {
-    // Reset explanation and guidance language when the main result or its target language changes
     setExplanationOutput(null);
     setShowExplanation(false);
     setIsExplaining(false);
@@ -92,7 +97,6 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
 
     setIsExplaining(true);
     setShowExplanation(true); 
-    // Do not setExplanationOutput(null) here if we want to keep old one while loading new
     
     try {
       const explanationResult = await explainSimplification({ 
@@ -126,7 +130,6 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
 
   const handleGuidanceLanguageChange = (newLang: string) => {
     setSelectedGuidanceLanguage(newLang);
-    // If explanation is already visible and we are not currently explaining, re-fetch in the new language.
     if (showExplanation && result?.simplifiedText && !isExplaining) {
       fetchExplanation(newLang);
     }
@@ -196,7 +199,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                 disabled={isExplaining || !result?.simplifiedText} 
                 className="transition-all duration-300 ease-in-out hover:bg-secondary/20 border-primary/50 text-primary hover:text-primary hover:border-primary futuristic-glow-primary hover:shadow-md group px-6 py-3 text-base"
               >
-                 {isExplaining && explanationOutput === null ? ( // Initial loading state
+                 {isExplaining && explanationOutput === null ? ( 
                     <>
                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Analyzing Situation...
                     </>
