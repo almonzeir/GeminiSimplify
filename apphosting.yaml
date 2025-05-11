@@ -1,0 +1,71 @@
+# Basic configuration for a Next.js SSR backend on Firebase App Hosting
+# For more options, see https://firebase.google.com/docs/hosting/frameworks/express
+
+# Specifies the version of the App Hosting YAML schema.
+# Version 1 is the latest.
+schemaVersion: 1
+
+# Describes the entry point for your SSR application.
+# This configuration assumes your Next.js app is built using 'npm run build'
+# and the output directory is '.next'.
+run:
+  # Specifies the command to start your Next.js application.
+  # 'npm run start' is the typical command for a production Next.js build.
+  command: npm run start
+  # Specifies the Node.js version.
+  # Adjust this if your project requires a different Node.js version.
+  # Common LTS versions are '20', '18'.
+  # For Next.js, it's good to use a version compatible with your Next.js version.
+  nodeVersion: 20
+
+# Describes the build process for your Next.js application.
+build:
+  # Specifies the command to build your Next.js application.
+  # 'npm run build' is the standard command.
+  command: npm run build
+  # Specifies the output directory where Next.js places the build artifacts.
+  # '.next' is the default output directory for Next.js.
+  outputDir: .next
+
+# Defines the scaling configuration for your App Hosting backend.
+scaling:
+  # Minimum number of instances that will be kept running.
+  # Setting to 0 allows Firebase to scale down to zero during periods of no traffic,
+  # which can save costs, but may result in slower responses for the first request (cold start).
+  # minInstances: 0
+  # For better initial performance and to avoid cold starts, you might set it to 1.
+  minInstances: 1
+
+  # Maximum number of instances that Firebase can scale up to.
+  # Setting this to 10 as requested.
+  maxInstances: 10
+
+  # Concurrency controls how many requests a single instance can handle simultaneously.
+  # Default is usually fine, but you can adjust if needed.
+  # concurrency: 80
+
+  # CPU allocation for each instance.
+  # Default is 1 CPU.
+  # cpu: 1
+
+  # Memory allocation for each instance.
+  # Default is '512MiB'. Options include '256MiB', '1GiB', '2GiB', etc.
+  # memory: "512MiB"
+
+# Environment variables that will be available to your application.
+# Add any environment variables your Next.js application needs here.
+# Example:
+# env:
+#   - variable: API_KEY
+#     value: "your_api_key_here"
+#   - variable: DATABASE_URL
+#     secret: YOUR_DATABASE_URL_SECRET # For secrets stored in Google Secret Manager
+
+# Defines how HTTP requests are routed to your application.
+# This basic configuration routes all requests to your Next.js run command.
+# For more complex routing or static asset serving, refer to Firebase documentation.
+serving:
+  # The ID of the run configuration defined above.
+  # All incoming requests will be handled by this run configuration.
+  run: default # 'default' typically refers to the 'run' block defined above.
+               # If you name your run block differently, update this value.
