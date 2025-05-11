@@ -250,12 +250,12 @@ export default function Home() {
       <section id="hero" className="w-full h-screen flex flex-col items-center justify-center relative text-center px-4 md:px-6 pt-20 overflow-hidden group">
         <Hero3DElement />
         <Image 
-            src="https://picsum.photos/seed/saysimplehero/1920/1080"
+            src="https://png.pngtree.com/background/20230416/original/pngtree-website-technology-line-dark-background-picture-image_2443641.jpg"
             alt="Abstract futuristic background with SAY SIMPLE text"
             layout="fill"
             objectFit="cover"
             className="absolute inset-0 z-0 opacity-40"
-            data-ai-hint="futuristic abstract"
+            data-ai-hint="technology lines"
             priority
         />
         <div className="z-10 relative scroll-animate">
@@ -447,3 +447,4 @@ export default function Home() {
     </div>
   );
 }
+

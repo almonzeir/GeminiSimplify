@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -21,6 +22,12 @@ const nextConfig: NextConfig = {
         hostname: 'thumbs.dreamstime.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'png.pngtree.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
@@ -37,3 +44,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
