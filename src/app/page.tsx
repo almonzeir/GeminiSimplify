@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { SimplificationForm } from "@/components/SimplificationForm";
 import { OutputDisplay } from "@/components/OutputDisplay";
 import { HistoryPanel } from "@/components/HistoryPanel"; 
-import { ArabicDialectTranslator } from "@/components/ArabicDialectTranslator"; // Import new component
+import { ArabicDialectTranslator } from "@/components/ArabicDialectTranslator";
 import { LogoIcon } from "@/components/icons/LogoIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -154,16 +154,16 @@ export default function Home() {
   const navItems = [
     { id: 'hero', label: 'Home' },
     { id: 'about', label: 'About' },
-    { id: 'services', label: 'Features' }, // Changed "Services" to "Features"
+    { id: 'services', label: 'Features' },
     { id: 'simplify', label: 'Simplify & Translate' },
-    { id: 'arabic-dialect-translator', label: 'Arabic Dialects' }, // Added Arabic Dialect Translator to nav
+    { id: 'arabic-dialect-translator', label: 'Arabic Dialects' },
     { id: 'contact', label: 'Contact' }
   ];
 
   const services = [
     { title: "AI Text Simplification", description: "Converts complex jargon and lengthy sentences into clear, concise text.", icon: <Sparkles className="h-8 w-8 text-primary"/>, targetSection: "simplify", dataAiHint:"brain lightbulb", glowClass: "futuristic-glow-primary" },
     { title: "Arabic Dialect Translation", description: "Translate text between various Arabic dialects with precision.", icon: <MessageSquareQuote className="h-8 w-8 text-accent"/>, targetSection: "arabic-dialect-translator", dataAiHint:"arabic dialects map", glowClass: "futuristic-glow-accent" },
-    { title: "Universal Language Translation", description: "Accurately translates text into numerous global languages.", icon: <Languages className="h-8 w-8 text-secondary"/>, targetSection: "simplify", dataAiHint:"globe languages", glowClass: "futuristic-glow-secondary" }, // General Translation card
+    { title: "Universal Language Translation", description: "Accurately translates text into numerous global languages.", icon: <Languages className="h-8 w-8 text-secondary"/>, targetSection: "simplify", dataAiHint:"globe languages", glowClass: "futuristic-glow-secondary" }, 
     { title: "Contextual Understanding", description: "AI considers context for natural simplifications and offers situational advice.", icon: <BrainCircuit className="h-8 w-8 text-primary"/>, targetSection: "simplify", dataAiHint:"connected nodes", glowClass: "futuristic-glow-primary" }
   ];
 
@@ -278,12 +278,12 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="scroll-animate">
               <Image 
-                src="https://picsum.photos/seed/saysimpleabout/600/600"
-                alt="Abstract image representing SaySimple's mission" 
-                width={600} 
-                height={600} 
-                className="rounded-lg shadow-xl object-cover aspect-square"
-                data-ai-hint="abstract technology"
+                src="https://picsum.photos/seed/saysimpleneon/1600/900"
+                alt="SAY SIMPLE neon text on dark world map background" 
+                width={1600} 
+                height={900} 
+                className="rounded-lg shadow-xl object-cover"
+                data-ai-hint="neon map"
               />
             </div>
             <div className="space-y-6 scroll-animate">
@@ -312,7 +312,7 @@ export default function Home() {
               SaySimple provides powerful tools to enhance your communication and understanding.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8"> {/* Adjusted to 2 columns for 4 items */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
             {services.map((service, index) => (
               <button 
                 key={index} 
