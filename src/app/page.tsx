@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -204,7 +205,7 @@ export default function Home() {
                 />
               </SheetContent>
             </Sheet>
-            <Button variant="default" onClick={() => scrollToSection('simplify')} className="futuristic-glow-accent">Get Started</Button>
+            <Button variant="default" onClick={() => scrollToSection('simplify')} className="text-accent-foreground bg-accent hover:bg-accent/90 futuristic-glow-accent">Get Started</Button>
           </nav>
           <div className="md:hidden flex items-center gap-2">
             <Sheet open={isHistoryPanelOpen} onOpenChange={setIsHistoryPanelOpen}>
@@ -239,7 +240,7 @@ export default function Home() {
                   {item.label}
                 </button>
               ))}
-              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 futuristic-glow-accent">Get Started</Button>
+              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 text-accent-foreground bg-accent hover:bg-accent/90 futuristic-glow-accent">Get Started</Button>
             </nav>
           </div>
         )}
@@ -248,6 +249,15 @@ export default function Home() {
       {/* Hero Section */}
       <section id="hero" className="w-full h-screen flex flex-col items-center justify-center relative text-center px-4 md:px-6 pt-20 overflow-hidden group">
         <Hero3DElement />
+        <Image 
+            src="https://picsum.photos/seed/saysimplehero/1920/1080"
+            alt="Abstract futuristic background with SAY SIMPLE text"
+            layout="fill"
+            objectFit="cover"
+            className="absolute inset-0 z-0 opacity-40"
+            data-ai-hint="futuristic abstract"
+            priority
+        />
         <div className="z-10 relative scroll-animate">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-glow-primary leading-tight">
             Simplify. Translate. Understand.
@@ -320,7 +330,7 @@ export default function Home() {
                 className="text-left w-full h-full block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background rounded-lg group/servicecard"
                 aria-label={`Learn more about ${service.title}`}
               >
-                <Card className={`bg-card/60 backdrop-blur-sm border-border/40 shadow-lg group-hover/servicecard:shadow-xl group-hover/servicecard:border-current transition-all duration-300 scroll-animate transform group-hover/servicecard:scale-[1.03] h-full flex flex-col ${service.glowClass} border-transparent group-focus/servicecard:border-current`}>
+                <Card className={`bg-card/60 backdrop-blur-sm shadow-lg group-hover/servicecard:shadow-xl transition-all duration-300 scroll-animate transform group-hover/servicecard:scale-[1.03] h-full flex flex-col ${service.glowClass}`}>
                   <CardHeader className="items-center text-center">
                     <div className={`p-3 rounded-full bg-current/10 mb-3 ${service.glowClass}`}>{service.icon}</div>
                     <CardTitle className={`text-xl ${service.title.includes("Arabic") ? 'text-glow-accent' : (service.title.includes("Universal") ? 'text-glow-secondary' : 'text-glow-primary')}`}>{service.title}</CardTitle>
@@ -340,7 +350,7 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-12 md:mb-16 scroll-animate">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-glow-primary tracking-tight">
-                    Simplify & Translate Universally
+                    Simplify &amp; Translate Universally
                 </h2>
                 <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
                     Experience the power of AI-driven text simplification and translation into various global languages.
@@ -408,7 +418,7 @@ export default function Home() {
                 <textarea id="message" name="message" rows={4} className="w-full bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-inner rounded-md p-3 placeholder:text-muted-foreground/60 min-h-[120px]" placeholder="Your message..."></textarea>
               </div>
               <div>
-                <Button type="submit" className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:futuristic-glow-primary">
+                <Button type="submit" className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:shadow-sm">
                   Send Message
                 </Button>
               </div>
@@ -427,7 +437,7 @@ export default function Home() {
                 <Link href="#" aria-label="GitHub" className="text-muted-foreground hover:text-primary transition-colors"><Github className="h-6 w-6"/></Link>
             </div>
             <p className="text-sm text-muted-foreground">
-              Powered by Genkit & Gemini AI &bull; Crafted with Next.js & ShadCN UI &bull; Design for Clarity
+              Powered by Genkit &amp; Gemini AI &bull; Crafted with Next.js &amp; ShadCN UI &bull; Design for Clarity
             </p>
             <p className="text-xs text-muted-foreground/70 mt-3">
               © {new Date().getFullYear()} SaySimple. All rights reserved.
