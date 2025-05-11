@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -261,12 +262,12 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="scroll-animate">
               <Image 
-                src="https://picsum.photos/600/400?random=1" 
-                alt="Abstract representation of understanding" 
+                src="https://picsum.photos/600/600?random=1" 
+                alt="SaySimple App Logo" 
                 width={600} 
-                height={400} 
-                className="rounded-lg shadow-xl object-cover aspect-[3/2]"
-                data-ai-hint="abstract network"
+                height={600} 
+                className="rounded-lg shadow-xl object-cover aspect-square"
+                data-ai-hint="say simple logo"
               />
             </div>
             <div className="space-y-6 scroll-animate">
@@ -399,3 +400,4 @@ export default function Home() {
       </footer>
     </div>
   );
+}
