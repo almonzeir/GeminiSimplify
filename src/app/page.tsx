@@ -278,12 +278,12 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="scroll-animate">
               <Image 
-                src="https://picsum.photos/seed/saysimpleneon/1600/900"
-                alt="SAY SIMPLE neon text on dark world map background" 
-                width={1600} 
-                height={900} 
-                className="rounded-lg shadow-xl object-cover"
-                data-ai-hint="neon map"
+                src="https://thumbs.dreamstime.com/b/simplify-businessman-drawing-landing-page-blackground-71784449.jpg"
+                alt="Businessman drawing a simplified concept on a dark background" 
+                width={800} 
+                height={534} 
+                className="rounded-lg shadow-xl object-cover w-full"
+                data-ai-hint="businessman simplify"
               />
             </div>
             <div className="space-y-6 scroll-animate">
