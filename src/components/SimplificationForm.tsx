@@ -30,7 +30,7 @@ import { suggestInputText } from "@/ai/flows/suggest-input-text";
 import { useToast } from "@/hooks/use-toast";
 import type { SimplificationResult } from "@/lib/types";
 
-// Shared languages list with various Arabic dialects
+// Expanded list of languages, including more specific Arabic options
 const languages = [
   { value: "English", label: "English" },
   { value: "Spanish", label: "Spanish" },
@@ -41,23 +41,39 @@ const languages = [
   { value: "Hindi", label: "Hindi" },
   { value: "Portuguese", label: "Portuguese" },
   { value: "Russian", label: "Russian" },
-  { value: "Arabic (Modern Standard)", label: "Arabic (Modern Standard)" },
-  { value: "Arabic (Egyptian)", label: "Arabic (Egyptian)" },
-  { value: "Arabic (Levantine)", label: "Arabic (Levantine)" },
-  { value: "Arabic (Gulf)", label: "Arabic (Gulf)" },
-  { value: "Arabic (Iraqi)", label: "Arabic (Iraqi)" },
-  { value: "Arabic (Maghrebi)", label: "Arabic (Maghrebi)" },
-  { value: "Arabic (Sudanese)", label: "Arabic (Sudanese)" },
-  { value: "Arabic (Yemeni)", label: "Arabic (Yemeni)" },
   { value: "Korean", label: "Korean" },
   { value: "Italian", label: "Italian" },
   { value: "Dutch", label: "Dutch" },
   { value: "Turkish", label: "Turkish" },
   { value: "Polish", label: "Polish" },
   { value: "Swedish", label: "Swedish" },
+  { value: "Arabic (Modern Standard)", label: "Arabic (Modern Standard)" },
+  { value: "Arabic (Egyptian)", label: "Arabic (Egyptian)" },
+  { value: "Arabic (Levantine)", label: "Arabic (Levantine)" },
+  { value: "Arabic (Gulf)", label: "Arabic (Gulf)" },
+  { value: "Arabic (Iraqi)", label: "Arabic (Iraqi)" },
+  { value: "Arabic (Maghrebi)", label: "Arabic (Maghrebi - Darija)" },
+  { value: "Arabic (Sudanese)", label: "Arabic (Sudanese)" },
+  { value: "Arabic (Yemeni)", label: "Arabic (Yemeni)" },
+  { value: "Arabic (Najdi)", label: "Arabic (Najdi)" },
+  { value: "Arabic (Hejazi)", label: "Arabic (Hejazi)" },
+  { value: "Arabic (Libyan)", label: "Arabic (Libyan)" },
+  { value: "Arabic (Hassaniya)", label: "Arabic (Hassaniya)" },
+  { value: "Urdu", label: "Urdu" },
+  { value: "Bengali", label: "Bengali" },
+  { value: "Farsi (Persian)", label: "Farsi (Persian)" },
+  { value: "Hebrew", label: "Hebrew" },
+  { value: "Greek", label: "Greek" },
+  { value: "Czech", label: "Czech" },
+  { value: "Hungarian", label: "Hungarian" },
+  { value: "Finnish", label: "Finnish" },
+  { value: "Danish", label: "Danish" },
+  { value: "Norwegian", label: "Norwegian" },
+  { value: "Indonesian", label: "Indonesian" },
+  { value: "Malay", label: "Malay" },
+  { value: "Filipino (Tagalog)", label: "Filipino (Tagalog)" },
   { value: "Vietnamese", label: "Vietnamese" },
   { value: "Thai", label: "Thai" },
-  { value: "Indonesian", label: "Indonesian" },
   { value: "Swahili", label: "Swahili" },
 ];
 
@@ -148,7 +164,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
     <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-primary transition-all duration-300 hover:shadow-2xl hover:border-primary/70 transform hover:scale-[1.01]">
       <CardHeader className="text-center pb-4 pt-6">
         <div className="flex justify-center items-center mb-2">
-            <Wand2 className="h-10 w-10 text-primary text-glow-primary" /> {/* Increased icon size */}
+            <Wand2 className="h-10 w-10 text-primary text-glow-primary" />
         </div>
         <CardTitle className="text-3xl font-bold text-glow-primary tracking-tight">
           Simplify & Translate
@@ -184,7 +200,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
                 name="targetLanguage"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel className="text-sm font-medium text-foreground/80">Target Language</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground/80">Translate Simplified Text To</FormLabel>
                      <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-sm text-foreground futuristic-glow-primary focus:shadow-md">
@@ -192,7 +208,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
                           <SelectValue placeholder="Select language" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-popover border-border/70 text-foreground">
+                      <SelectContent className="bg-popover border-border/70 text-foreground max-h-72">
                         {languages.map((lang) => (
                           <SelectItem key={lang.value} value={lang.value} className="hover:bg-primary/20 focus:bg-primary/30">
                             {lang.label}

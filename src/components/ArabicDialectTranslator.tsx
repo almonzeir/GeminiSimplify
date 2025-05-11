@@ -29,23 +29,37 @@ import { translateArabicDialect, TranslateArabicDialectOutput } from "@/ai/flows
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Comprehensive list of Arabic dialects
 const arabicDialects = [
-  { value: "Modern Standard Arabic", label: "Arabic (Modern Standard)" },
-  { value: "Egyptian Arabic", label: "Arabic (Egyptian)" },
-  { value: "Levantine Arabic", label: "Arabic (Levantine - Syrian, Lebanese, Palestinian, Jordanian)" },
-  { value: "Gulf Arabic", label: "Arabic (Gulf - Khaliji)" },
-  { value: "Iraqi Arabic", label: "Arabic (Iraqi)" },
-  { value: "Maghrebi Arabic", label: "Arabic (Maghrebi - Moroccan, Algerian, Tunisian, Libyan)" },
+  { value: "Modern Standard Arabic", label: "Arabic (Modern Standard - MSA)" },
+  { value: "Egyptian Arabic", label: "Arabic (Egyptian - Masri)" },
   { value: "Sudanese Arabic", label: "Arabic (Sudanese)" },
-  { value: "Yemeni Arabic", label: "Arabic (Yemeni)" },
-  { value: "Najdi Arabic", label: "Arabic (Najdi)" },
-  { value: "Hejazi Arabic", label: "Arabic (Hejazi)" },
-  // Add more dialects as needed
+  { value: "Levantine Arabic (North)", label: "Arabic (Levantine - North: Syrian, Lebanese)" },
+  { value: "Levantine Arabic (South)", label: "Arabic (Levantine - South: Palestinian, Jordanian)" },
+  { value: "Iraqi Arabic", label: "Arabic (Iraqi - Baghdadi)" },
+  { value: "Gulf Arabic (General Khaliji)", label: "Arabic (Gulf - General Khaliji)" },
+  { value: "Kuwaiti Arabic", label: "Arabic (Gulf - Kuwaiti)" },
+  { value: "Bahraini Arabic", label: "Arabic (Gulf - Bahraini)" },
+  { value: "Qatari Arabic", label: "Arabic (Gulf - Qatari)" },
+  { value: "Emirati Arabic", label: "Arabic (Gulf - Emirati)" },
+  { value: "Omani Arabic", label: "Arabic (Gulf - Omani)" },
+  { value: "Najdi Arabic", label: "Arabic (Saudi - Najdi)" },
+  { value: "Hejazi Arabic", label: "Arabic (Saudi - Hejazi)" },
+  { value: "Yemeni Arabic (Sanaani)", label: "Arabic (Yemeni - Sanaani)" },
+  { value: "Yemeni Arabic (Adeni)", label: "Arabic (Yemeni - Adeni)" },
+  { value: "Maghrebi Arabic (Moroccan Darija)", label: "Arabic (Maghrebi - Moroccan Darija)" },
+  { value: "Maghrebi Arabic (Algerian)", label: "Arabic (Maghrebi - Algerian)" },
+  { value: "Maghrebi Arabic (Tunisian)", label: "Arabic (Maghrebi - Tunisian)" },
+  { value: "Libyan Arabic", label: "Arabic (Libyan)" },
+  { value: "Hassaniya Arabic", label: "Arabic (Hassaniya - Mauritania, W. Sahara)" },
+  { value: "Chadian Arabic", label: "Arabic (Chadian)" },
+  // Consider adding more specific sub-dialects if the AI can handle them effectively
 ];
 
+
 const formSchema = z.object({
-  inputText: z.string().min(5, {
-    message: "Please enter at least 5 characters.",
+  inputText: z.string().min(3, { // Reduced min for very short phrases
+    message: "Please enter at least 3 characters.",
   }).max(2000, { message: "Text cannot exceed 2000 characters."}),
   sourceDialect: z.string({
     required_error: "Please select the source dialect.",
@@ -55,7 +69,7 @@ const formSchema = z.object({
   }),
 }).refine(data => data.sourceDialect !== data.targetDialect, {
   message: "Source and target dialects cannot be the same.",
-  path: ["targetDialect"], // Point error to targetDialect field
+  path: ["targetDialect"], 
 });
 
 export function ArabicDialectTranslator() {
@@ -67,14 +81,14 @@ export function ArabicDialectTranslator() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       inputText: "",
-      sourceDialect: "Egyptian Arabic", // Default source
-      targetDialect: "Levantine Arabic", // Default target
+      sourceDialect: "Egyptian Arabic", 
+      targetDialect: "Levantine Arabic (North)", 
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      setTranslationResult(null); // Clear previous results while loading
+      setTranslationResult(null); 
       try {
         const result = await translateArabicDialect({
           inputText: values.inputText,
@@ -83,7 +97,7 @@ export function ArabicDialectTranslator() {
         });
         setTranslationResult(result);
         toast({
-          title: "Translation Complete",
+          title: "Dialect Translation Complete",
           description: `Text translated from ${values.sourceDialect} to ${values.targetDialect}.`,
           className: "bg-background border-accent text-foreground futuristic-glow-accent",
         });
@@ -91,8 +105,8 @@ export function ArabicDialectTranslator() {
         console.error("Arabic dialect translation failed:", error);
         toast({
           variant: "destructive",
-          title: "Translation Error",
-          description: "Failed to translate between Arabic dialects. Please try again.",
+          title: "Dialect Translation Error",
+          description: "Failed to translate between Arabic dialects. The AI might have limitations with the selected pair or the input text. Please try again or with different dialects.",
           className: "bg-destructive border-destructive/50 text-destructive-foreground"
         });
         setTranslationResult(null); 
@@ -112,13 +126,13 @@ export function ArabicDialectTranslator() {
       <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-accent transition-all duration-300 hover:shadow-2xl hover:border-accent/70 transform hover:scale-[1.01]">
         <CardHeader className="text-center pb-4 pt-6">
           <div className="flex justify-center items-center mb-2">
-              <MessageSquareQuote className="h-12 w-12 text-accent text-glow-accent" /> {/* Increased icon size */}
+              <MessageSquareQuote className="h-12 w-12 text-accent text-glow-accent" />
           </div>
           <CardTitle className="text-3xl font-bold text-glow-accent tracking-tight">
             Arabic Dialect Bridge
           </CardTitle>
           <CardDescription className="text-muted-foreground pt-1 text-sm">
-            Translate text between various Arabic dialects with ease.
+            Seamlessly translate text between a wide range of Arabic dialects.
           </CardDescription>
         </CardHeader>
         <CardContent className="px-6 pb-8 pt-4">
@@ -135,6 +149,7 @@ export function ArabicDialectTranslator() {
                         placeholder="اكتب النص باللهجة المصدر هنا..."
                         className="min-h-[140px] resize-y bg-input border-border/70 focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-200 ease-in-out shadow-inner placeholder:text-muted-foreground/60 futuristic-glow-accent focus:shadow-md"
                         {...field}
+                        dir="auto" // For better RTL/LTR handling based on input
                       />
                     </FormControl>
                     <FormMessage className="text-destructive/80" />
@@ -156,7 +171,7 @@ export function ArabicDialectTranslator() {
                             <SelectValue placeholder="Select source dialect" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="bg-popover border-border/70 text-foreground max-h-60">
+                        <SelectContent className="bg-popover border-border/70 text-foreground max-h-72">
                           {arabicDialects.map((lang) => (
                             <SelectItem key={`source-${lang.value}`} value={lang.value} className="hover:bg-accent/20 focus:bg-accent/30">
                               {lang.label}
@@ -193,7 +208,7 @@ export function ArabicDialectTranslator() {
                             <SelectValue placeholder="Select target dialect" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="bg-popover border-border/70 text-foreground max-h-60">
+                        <SelectContent className="bg-popover border-border/70 text-foreground max-h-72">
                           {arabicDialects.map((lang) => (
                             <SelectItem key={`target-${lang.value}`} value={lang.value} className="hover:bg-accent/20 focus:bg-accent/30">
                               {lang.label}
@@ -230,7 +245,7 @@ export function ArabicDialectTranslator() {
       {(isPending || translationResult) && (
         <Card className="w-full bg-card/60 backdrop-blur-sm border-border/40 shadow-lg min-h-[150px] futuristic-glow-primary transform hover:scale-[1.01] transition-transform duration-300">
           <CardHeader className="pb-2 pt-4 px-4">
-            <CardTitle className="text-xl font-semibold text-glow-primary">Translated Text (in {form.getValues("targetDialect")})</CardTitle>
+            <CardTitle className="text-xl font-semibold text-glow-primary">Translated Text (in {form.getValues("targetDialect") || "target dialect"})</CardTitle>
           </CardHeader>
           <CardContent className="pt-2 px-4 pb-4">
             {isPending ? (
@@ -240,7 +255,7 @@ export function ArabicDialectTranslator() {
                 <Skeleton className="h-5 w-3/4 animate-pulse-bg rounded bg-muted/20" />
               </div>
             ) : translationResult?.translatedText ? (
-              <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed">{translationResult.translatedText}</p>
+              <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed" dir="auto">{translationResult.translatedText}</p>
             ) : (
               <p className="text-sm text-muted-foreground/70 italic">Translation will appear here.</p>
             )}

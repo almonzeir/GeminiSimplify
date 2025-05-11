@@ -1,6 +1,7 @@
+
 'use server';
 /**
- * @fileOverview AI agent that interprets a simplified text, explains the potential real-world scenario it implies, and suggests next steps.
+ * @fileOverview AI agent that interprets a simplified text, explains the potential real-world scenario it implies with high accuracy, and suggests practical, culturally relevant next steps, especially for various Arabic dialects.
  *
  * - explainSimplification - A function that provides a situational explanation and next steps for a given simplified text.
  * - ExplainSimplificationInput - The input type for the explainSimplification function.
@@ -11,8 +12,8 @@ import {ai} from '@/ai/ai-instance';
 import {z} from 'genkit';
 
 const ExplainSimplificationInputSchema = z.object({
-  simplifiedText: z.string().describe('The simplified text that implies a real-world situation.'),
-  language: z.string().describe('The target language for the explanation and next steps. Can also specify an Arabic dialect, e.g., "Sudanese Arabic".'),
+  simplifiedText: z.string().describe('The simplified text that implies a real-world situation or problem.'),
+  language: z.string().describe('The target language for the explanation and next steps. This can be a general language (e.g., "English", "Arabic") or a specific Arabic dialect (e.g., "Sudanese Arabic", "Egyptian Arabic", "Moroccan Darija").'),
 });
 export type ExplainSimplificationInput = z.infer<typeof ExplainSimplificationInputSchema>;
 
@@ -20,12 +21,12 @@ const ExplainSimplificationOutputSchema = z.object({
   scenarioExplanation: z
     .string()
     .describe(
-      'An explanation of the potential real-world scenario implied by the simplified text, in the target language.'
+      'A clear, concise, and culturally sensitive explanation of the potential real-world scenario implied by the simplified text, delivered in the target language/dialect. If the AI cannot provide a nuanced explanation for a highly specific dialect, it should explain this and offer the explanation in a more broadly understood form (e.g., MSA for Arabic dialects) with a note.'
     ),
   nextSteps: z
     .string()
     .describe(
-      'Actionable next steps or advice for the user based on the scenario, in the target language. This can be a paragraph or a list formatted with newlines.'
+      'Practical, actionable, and culturally appropriate next steps or advice for the user based on the scenario, delivered in the target language/dialect. This can be a paragraph or a list formatted with newlines (e.g., using "- " or "* " for list items). If the AI cannot provide nuanced advice for a highly specific dialect, it should explain this and offer advice in a more broadly understood form with a note.'
     ),
 });
 export type ExplainSimplificationOutput = z.infer<typeof ExplainSimplificationOutputSchema>;
@@ -37,40 +38,64 @@ export async function explainSimplification(
 }
 
 const explainSimplificationPrompt = ai.definePrompt({
-  name: 'explainSituationalGuidancePrompt',
+  name: 'explainSituationalGuidancePromptEnhanced',
   input: {
     schema: ExplainSimplificationInputSchema,
   },
   output: {
     schema: ExplainSimplificationOutputSchema,
   },
-  prompt: `You are a helpful AI assistant. A user has received a simplified piece of text. Your task is to:
-1. Interpret this simplified text as a potential real-world situation or problem the user might be facing.
-2. Explain this situation to the user in plain terms, in the target language: {{{language}}}.
-3. Provide practical, actionable next steps or advice for the user in this situation, also in the target language: {{{language}}}.
+  prompt: `You are a highly skilled AI assistant empathetic to users needing to understand complex situations from simplified text. Your task is to provide an insightful interpretation and actionable advice.
 
-Focus on being helpful and providing guidance. Avoid merely rephrasing the text or explaining linguistic changes.
-Think about what this message implies if someone received it in real life. For example, if the text is "Entering this country is difficult. You should return to your country.", it might imply an immigration or border control issue. Another example: if the simplified text is "Police need your documents now", it implies an encounter with law enforcement requiring identification, and next steps might involve calmly complying, asking for clarification if needed, and knowing your rights.
+Given the simplified text: "{{simplifiedText}}"
+And the target language/dialect for your response: "{{language}}"
 
-Here is the simplified text you need to interpret:
-"{{{simplifiedText}}}"
+1.  **Interpret the Scenario (Scenario Explanation):**
+    *   Analyze the "{{simplifiedText}}" deeply. What real-world situation, problem, or interaction does this text most likely represent or imply for someone who received or encountered it?
+    *   Explain this implied scenario to the user in plain, easy-to-understand terms using the specified "{{language}}". Be direct and clear.
+    *   Focus on the practical implications. For example, "Police need your documents now" implies an encounter with law enforcement, not a linguistic analysis of the sentence. "Entering this country is difficult. You should return to your country." implies an immigration or border issue.
 
-Target language for your response (explanation and next steps): {{{language}}}.
+2.  **Provide Actionable Advice (Next Steps):**
+    *   Based on your interpretation, offer practical, actionable next steps, advice, or guidance for the user in this situation.
+    *   The advice must be relevant to the implied scenario and helpful to someone genuinely facing it.
+    *   Format these steps clearly. If a list is appropriate, use hyphens (-) or asterisks (*) at the start of each step within the string. The entire "nextSteps" field should be a single string.
+    *   Deliver these next steps in the specified "{{language}}".
 
-IMPORTANT - ARABIC LANGUAGE: If the target language '{{{language}}}' is 'Arabic' or specifies an Arabic dialect (e.g., 'Sudanese Arabic', 'Egyptian Arabic', 'Levantine Arabic'), please provide the response in clear, widely understandable Arabic. If '{{{language}}}' explicitly names a specific dialect (e.g., 'Sudanese Arabic'), prioritize using that dialect. If '{{{language}}}' is just 'Arabic', use Modern Standard Arabic (MSA) or a broadly understood colloquial Arabic.
+**Crucial Instructions for Language and Dialect Handling (Especially Arabic):**
+*   **Accuracy is Paramount:** Your response (both explanation and next steps) MUST be in the "{{language}}" specified.
+*   **Arabic Dialects:**
+    *   If "{{language}}" is a specific Arabic dialect (e.g., "Sudanese Arabic", "Egyptian Arabic", "Levantine - Syrian", "Moroccan Darija", "Gulf - Kuwaiti"):
+        *   You MUST make every effort to provide the response in that *exact* dialect, using appropriate vocabulary, grammar, and cultural nuances.
+        *   If you are not highly confident in producing an accurate and nuanced response in the *exact* specified dialect for this particular scenario:
+            1.  Attempt the specific dialect, but if you must generalize some phrases or vocabulary to a broader regional form, you can add a very brief parenthetical note in English at the end of the relevant field (scenarioExplanation or nextSteps), e.g., "(Note: Aimed for {{language}}; some phrasing may reflect broader regional Arabic.)".
+            2.  If you have very low confidence in the specific dialect for this context, provide the response in Modern Standard Arabic (MSA) or a widely understood regional Arabic (e.g., general Egyptian or Levantine, if related) AND clearly state this choice at the beginning of the relevant field in English, e.g., "(Explanation provided in Modern Standard Arabic as specific advice for {{language}} in this context is challenging:) [followed by MSA explanation]". Do the same for "nextSteps" if needed.
+    *   If "{{language}}" is just "Arabic" (without a dialect): Use clear Modern Standard Arabic (MSA) or a broadly understood colloquial Arabic.
 
-Output the scenario explanation and the next steps. Format next steps clearly, perhaps using bullet points if appropriate (e.g., using '-' or '*' at the start of each step within the string).`,
+**General Guidelines:**
+*   **Be Empathetic and Helpful:** Your tone should be supportive and understanding.
+*   **Avoid Generic Responses:** Tailor your explanation and advice to the specific "{{simplifiedText}}".
+*   **Do Not Rephrase Linguistically:** Do not explain the linguistic simplification itself. Focus on the real-world meaning and actions.
+
+Output the scenario explanation and the next steps as a JSON object.
+`,
 });
 
 const explainSimplificationFlow = ai.defineFlow<
   typeof ExplainSimplificationInputSchema, 
   typeof ExplainSimplificationOutputSchema
 >({
-  name: 'explainSituationalGuidanceFlow',
+  name: 'explainSituationalGuidanceFlowEnhanced',
   inputSchema: ExplainSimplificationInputSchema,
   outputSchema: ExplainSimplificationOutputSchema,
 },
 async input => {
   const {output} = await explainSimplificationPrompt(input);
-  return output!;
+  if (!output || typeof output.scenarioExplanation !== 'string' || typeof output.nextSteps !== 'string') {
+    console.error("AI output for explanation was not in the expected format:", output);
+    return {
+      scenarioExplanation: "(Error: The AI failed to generate an explanation. Please try again or use a different language.)",
+      nextSteps: "(Error: The AI failed to generate next steps.)"
+    };
+  }
+  return output;
 });
