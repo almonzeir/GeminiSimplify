@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import { SimplificationForm } from "@/components/SimplificationForm";
 import { OutputDisplay } from "@/components/OutputDisplay";
 import { HistoryPanel } from "@/components/HistoryPanel"; 
+import { ArabicDialectTranslator } from "@/components/ArabicDialectTranslator"; // Import new component
 import { LogoIcon } from "@/components/icons/LogoIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight, Languages, Wand2, History as HistoryIcon } from "lucide-react"; 
+import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight, Languages, Wand2, History as HistoryLucideIcon, MessageSquareQuote } from "lucide-react"; 
 import Image from "next/image";
 import type { SimplificationResult, HistoryItem } from "@/lib/types"; 
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"; 
@@ -23,8 +24,8 @@ const Hero3DElement = () => {
       if (!elementRef.current) return;
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
-      const xRotation = (clientY / innerHeight - 0.5) * 5; // Reduced sensitivity
-      const yRotation = (clientX / innerWidth - 0.5) * -5; // Reduced sensitivity
+      const xRotation = (clientY / innerHeight - 0.5) * 3; // Reduced sensitivity
+      const yRotation = (clientX / innerWidth - 0.5) * -3; // Reduced sensitivity
       elementRef.current.style.transform = `translate(-50%, -50%) perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
     };
 
@@ -33,7 +34,7 @@ const Hero3DElement = () => {
   }, []);
 
   return (
-    <div ref={elementRef} className="hero-3d-element pointer-events-none">
+    <div ref={elementRef} className="hero-3d-element pointer-events-none opacity-30 group-hover:opacity-50 transition-opacity duration-500">
       <div className="hero-3d-plane">
         <div className="hero-3d-line line-1" style={{ top: '20%', opacity: 0.3 }}></div>
         <div className="hero-3d-line line-2" style={{ top: '80%', opacity: 0.3 }}></div>
@@ -122,7 +123,7 @@ export default function Home() {
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     setIsMenuOpen(false);
   };
@@ -149,6 +150,22 @@ export default function Home() {
     setHistoryItems([]);
     localStorage.removeItem(LOCAL_STORAGE_HISTORY_KEY);
   };
+  
+  const navItems = [
+    { id: 'hero', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'services', label: 'Features' }, // Changed "Services" to "Features"
+    { id: 'simplify', label: 'Simplify & Translate' },
+    { id: 'arabic-dialect-translator', label: 'Arabic Dialects' }, // Added Arabic Dialect Translator to nav
+    { id: 'contact', label: 'Contact' }
+  ];
+
+  const services = [
+    { title: "AI Text Simplification", description: "Converts complex jargon and lengthy sentences into clear, concise text.", icon: <Sparkles className="h-8 w-8 text-primary"/>, targetSection: "simplify", dataAiHint:"brain lightbulb", glowClass: "futuristic-glow-primary" },
+    { title: "Arabic Dialect Translation", description: "Translate text between various Arabic dialects with precision.", icon: <MessageSquareQuote className="h-8 w-8 text-accent"/>, targetSection: "arabic-dialect-translator", dataAiHint:"arabic dialects map", glowClass: "futuristic-glow-accent" },
+    { title: "Universal Language Translation", description: "Accurately translates text into numerous global languages.", icon: <Languages className="h-8 w-8 text-secondary"/>, targetSection: "simplify", dataAiHint:"globe languages", glowClass: "futuristic-glow-secondary" }, // General Translation card
+    { title: "Contextual Understanding", description: "AI considers context for natural simplifications and offers situational advice.", icon: <BrainCircuit className="h-8 w-8 text-primary"/>, targetSection: "simplify", dataAiHint:"connected nodes", glowClass: "futuristic-glow-primary" }
+  ];
 
 
   return (
@@ -162,20 +179,20 @@ export default function Home() {
               SaySimple
             </h1>
           </Link>
-          <nav className="hidden md:flex gap-4 items-center"> 
-            {['hero', 'about', 'services', 'simplify', 'contact'].map((item) => (
+          <nav className="hidden md:flex gap-3 items-center"> 
+            {navItems.map((item) => (
               <button
-                key={item}
-                onClick={() => scrollToSection(item)}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors capitalize"
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors capitalize px-2 py-1 rounded-md hover:bg-primary/10"
               >
-                {item === 'hero' ? 'Home' : item}
+                {item.label}
               </button>
             ))}
             <Sheet open={isHistoryPanelOpen} onOpenChange={setIsHistoryPanelOpen}>
               <SheetTrigger asChild>
                  <Button variant="outline" className="border-primary/70 text-primary/90 hover:bg-primary/10 futuristic-glow-primary">
-                   <HistoryIcon className="mr-2 h-4 w-4" /> History
+                   <HistoryLucideIcon className="mr-2 h-4 w-4" /> History
                  </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:max-w-md md:max-w-lg bg-card/95 backdrop-blur-lg border-border/50 text-card-foreground">
@@ -187,13 +204,13 @@ export default function Home() {
                 />
               </SheetContent>
             </Sheet>
-            <Button variant="default" onClick={() => scrollToSection('simplify')} className="futuristic-glow-accent">Simplify & Translate</Button>
+            <Button variant="default" onClick={() => scrollToSection('simplify')} className="futuristic-glow-accent">Get Started</Button>
           </nav>
           <div className="md:hidden flex items-center gap-2">
             <Sheet open={isHistoryPanelOpen} onOpenChange={setIsHistoryPanelOpen}>
               <SheetTrigger asChild>
                  <Button variant="ghost" size="icon" aria-label="View History">
-                   <HistoryIcon className="h-5 w-5" />
+                   <HistoryLucideIcon className="h-5 w-5" />
                  </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:max-w-xs bg-card/95 backdrop-blur-lg border-border/50 text-card-foreground">
@@ -213,23 +230,23 @@ export default function Home() {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md shadow-lg py-4">
             <nav className="container mx-auto flex flex-col gap-4 px-6">
-              {['hero', 'about', 'services', 'simplify', 'contact'].map((item) => (
+              {navItems.map((item) => (
                 <button
-                  key={item}
-                  onClick={() => scrollToSection(item)}
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
                   className="text-base font-medium text-foreground hover:text-primary transition-colors capitalize py-2 text-left"
                 >
-                  {item === 'hero' ? 'Home' : item}
+                  {item.label}
                 </button>
               ))}
-              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 futuristic-glow-accent">Simplify & Translate</Button>
+              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 futuristic-glow-accent">Get Started</Button>
             </nav>
           </div>
         )}
       </header>
 
       {/* Hero Section */}
-      <section id="hero" className="w-full h-screen flex flex-col items-center justify-center relative text-center px-4 md:px-6 pt-20 overflow-hidden">
+      <section id="hero" className="w-full h-screen flex flex-col items-center justify-center relative text-center px-4 md:px-6 pt-20 overflow-hidden group">
         <Hero3DElement />
         <div className="z-10 relative scroll-animate">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-glow-primary leading-tight">
@@ -239,8 +256,8 @@ export default function Home() {
             SaySimple uses advanced AI to make complex text easy to grasp and bridges language barriers effortlessly.
           </p>
           <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={() => scrollToSection('simplify')} className="futuristic-glow-primary text-lg px-8 py-6 group bg-primary text-primary-foreground hover:bg-primary/90">
-              Translate and simplify any complex text <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform"/>
+            <Button size="lg" onClick={() => scrollToSection('simplify')} className="futuristic-glow-primary text-lg px-8 py-6 group/maincta bg-primary text-primary-foreground hover:bg-primary/90">
+              Translate and simplify any complex text <ArrowRight className="ml-2 h-5 w-5 group-hover/maincta:translate-x-1 transition-transform"/>
             </Button>
             <Button size="lg" variant="outline" onClick={() => scrollToSection('about')} className="text-lg px-8 py-6 border-accent text-accent hover:bg-accent/10 hover:text-accent-foreground futuristic-glow-accent">
               Learn More <ChevronDown className="ml-2 h-5 w-5"/>
@@ -261,7 +278,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="scroll-animate">
               <Image 
-                src="https://picsum.photos/600/600?random=about_section_image" 
+                src="https://picsum.photos/seed/saysimpleabout/600/600"
                 alt="Abstract image representing SaySimple's mission" 
                 width={600} 
                 height={600} 
@@ -286,30 +303,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Features Section (formerly Services) */}
       <section id="services" className="w-full py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12 md:mb-16 scroll-animate">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-glow-accent tracking-tight">What We Offer</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-glow-accent tracking-tight">Key Features</h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
               SaySimple provides powerful tools to enhance your communication and understanding.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {[
-              { title: "AI Text Simplification", description: "Converts complex jargon and lengthy sentences into clear, concise text.", icon: <Sparkles className="h-8 w-8 text-accent"/>, dataAiHint:"brain lightbulb" },
-              { title: "Multi-Language Translation", description: "Accurately translates text into numerous languages, including specialized dialects.", icon: <Languages className="h-8 w-8 text-accent"/>, dataAiHint:"globe languages" },
-              { title: "Contextual Understanding", description: "Our AI considers context to provide more natural and accurate simplifications and translations.", icon: <BrainCircuit className="h-8 w-8 text-accent"/>, dataAiHint:"connected nodes" }
-            ].map((service, index) => (
-              <Card key={index} className="bg-card/60 backdrop-blur-sm border-border/40 shadow-lg hover:shadow-xl hover:border-accent/70 transition-all duration-300 scroll-animate transform hover:scale-[1.03]">
-                <CardHeader className="items-center text-center">
-                  <div className="p-3 rounded-full bg-accent/10 mb-3 futuristic-glow-accent">{service.icon}</div>
-                  <CardTitle className="text-xl text-glow-accent">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-muted-foreground text-sm">{service.description}</p>
-                </CardContent>
-              </Card>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8"> {/* Adjusted to 2 columns for 4 items */}
+            {services.map((service, index) => (
+              <button 
+                key={index} 
+                onClick={() => scrollToSection(service.targetSection)} 
+                className="text-left w-full h-full block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background rounded-lg group/servicecard"
+                aria-label={`Learn more about ${service.title}`}
+              >
+                <Card className={`bg-card/60 backdrop-blur-sm border-border/40 shadow-lg group-hover/servicecard:shadow-xl group-hover/servicecard:border-current transition-all duration-300 scroll-animate transform group-hover/servicecard:scale-[1.03] h-full flex flex-col ${service.glowClass} border-transparent group-focus/servicecard:border-current`}>
+                  <CardHeader className="items-center text-center">
+                    <div className={`p-3 rounded-full bg-current/10 mb-3 ${service.glowClass}`}>{service.icon}</div>
+                    <CardTitle className={`text-xl ${service.title.includes("Arabic") ? 'text-glow-accent' : (service.title.includes("Universal") ? 'text-glow-secondary' : 'text-glow-primary')}`}>{service.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center flex-grow">
+                    <p className="text-muted-foreground text-sm">{service.description}</p>
+                  </CardContent>
+                </Card>
+              </button>
             ))}
           </div>
         </div>
@@ -320,10 +340,10 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-12 md:mb-16 scroll-animate">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-glow-primary tracking-tight">
-                    Try SaySimple Now
+                    Simplify & Translate Universally
                 </h2>
                 <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
-                    Experience the power of AI-driven text simplification and translation.
+                    Experience the power of AI-driven text simplification and translation into various global languages.
                 </p>
             </div>
             <div className="w-full max-w-4xl mx-auto flex flex-col items-center space-y-10 scroll-animate">
@@ -331,7 +351,7 @@ export default function Home() {
                   onResult={handleResult} 
                   initialText={inputTextForOutput} 
                   initialLanguage={targetLanguageForOutput} 
-                  key={`${inputTextForOutput}-${targetLanguageForOutput}`} 
+                  key={`simplification-${inputTextForOutput}-${targetLanguageForOutput}`} 
                 />
                 {(isLoading || result) && (
                     <OutputDisplay
@@ -345,33 +365,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Arabic Dialect Translator Section */}
+      <section id="arabic-dialect-translator" className="w-full py-16 md:py-24">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="text-center mb-12 md:mb-16 scroll-animate">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-glow-accent tracking-tight">
+                    Arabic Dialect Translator
+                </h2>
+                <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
+                    Bridge communication gaps between different Arabic dialects seamlessly.
+                </p>
+            </div>
+            <div className="w-full max-w-4xl mx-auto flex flex-col items-center space-y-10 scroll-animate">
+                <ArabicDialectTranslator />
+            </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
-      <section id="contact" className="w-full py-16 md:py-24">
+      <section id="contact" className="w-full py-16 md:py-24 bg-background/50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12 md:mb-16 scroll-animate">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-glow-accent tracking-tight">Get In Touch</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-glow-primary tracking-tight">Get In Touch</h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
               Have questions or want to learn more? We'd love to hear from you.
             </p>
           </div>
-          <Card className="max-w-2xl mx-auto bg-card/60 backdrop-blur-sm border-border/40 shadow-xl p-6 md:p-8 scroll-animate futuristic-glow-accent">
+          <Card className="max-w-2xl mx-auto bg-card/60 backdrop-blur-sm border-border/40 shadow-xl p-6 md:p-8 scroll-animate futuristic-glow-primary">
             <form className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-foreground/80 mb-1">Full Name</label>
-                  <input type="text" id="name" name="name" className="w-full bg-input border-border/70 focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-200 ease-in-out shadow-inner rounded-md p-3 placeholder:text-muted-foreground/60" placeholder="Your Name" />
+                  <input type="text" id="name" name="name" className="w-full bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-inner rounded-md p-3 placeholder:text-muted-foreground/60" placeholder="Your Name" />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-foreground/80 mb-1">Email Address</label>
-                  <input type="email" id="email" name="email" className="w-full bg-input border-border/70 focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-200 ease-in-out shadow-inner rounded-md p-3 placeholder:text-muted-foreground/60" placeholder="you@example.com" />
+                  <input type="email" id="email" name="email" className="w-full bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-inner rounded-md p-3 placeholder:text-muted-foreground/60" placeholder="you@example.com" />
                 </div>
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-foreground/80 mb-1">Message</label>
-                <textarea id="message" name="message" rows={4} className="w-full bg-input border-border/70 focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-200 ease-in-out shadow-inner rounded-md p-3 placeholder:text-muted-foreground/60 min-h-[120px]" placeholder="Your message..."></textarea>
+                <textarea id="message" name="message" rows={4} className="w-full bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-inner rounded-md p-3 placeholder:text-muted-foreground/60 min-h-[120px]" placeholder="Your message..."></textarea>
               </div>
               <div>
-                <Button type="submit" className="w-full text-lg py-3 bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-accent/40 shadow-lg futuristic-glow-accent active:futuristic-glow-accent">
+                <Button type="submit" className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:futuristic-glow-primary">
                   Send Message
                 </Button>
               </div>
@@ -400,4 +437,3 @@ export default function Home() {
     </div>
   );
 }
-
