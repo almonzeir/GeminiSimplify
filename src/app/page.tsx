@@ -1,22 +1,20 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { SimplificationForm } from "@/components/SimplificationForm";
 import { OutputDisplay } from "@/components/OutputDisplay";
-import { HistoryPanel } from "@/components/HistoryPanel"; // Import HistoryPanel
+import { HistoryPanel } from "@/components/HistoryPanel"; 
 import { LogoIcon } from "@/components/icons/LogoIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight, Languages, Wand2, History as HistoryIcon } from "lucide-react"; // Added HistoryIcon
+import { Menu, Sparkles, BrainCircuit, ChevronDown, Facebook, Twitter, Linkedin, Github, ArrowRight, Languages, Wand2, History as HistoryIcon } from "lucide-react"; 
 import Image from "next/image";
-import type { SimplificationResult, HistoryItem } from "@/lib/types"; // Import shared types
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"; // Import Sheet components
+import type { SimplificationResult, HistoryItem } from "@/lib/types"; 
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"; 
 
 const LOCAL_STORAGE_HISTORY_KEY = "saySimpleHistory";
 
-// Simulated 3D Hero Element
 const Hero3DElement = () => {
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -25,9 +23,9 @@ const Hero3DElement = () => {
       if (!elementRef.current) return;
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
-      const xRotation = (clientY / innerHeight - 0.5) * 10; // Reduced rotation
-      const yRotation = (clientX / innerWidth - 0.5) * -10; // Reduced rotation
-      elementRef.current.style.transform = `translate(-50%, -50%) perspective(800px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+      const xRotation = (clientY / innerHeight - 0.5) * 5; // Reduced sensitivity
+      const yRotation = (clientX / innerWidth - 0.5) * -5; // Reduced sensitivity
+      elementRef.current.style.transform = `translate(-50%, -50%) perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -35,19 +33,17 @@ const Hero3DElement = () => {
   }, []);
 
   return (
-    <div ref={elementRef} className="hero-3d-element">
+    <div ref={elementRef} className="hero-3d-element pointer-events-none">
       <div className="hero-3d-plane">
-        {/* Simplified lines for effect */}
-        <div className="hero-3d-line line-1" style={{ top: '20%', opacity: 0.4 }}></div>
-        <div className="hero-3d-line line-2" style={{ top: '80%', opacity: 0.4 }}></div>
-        <div className="hero-3d-line line-3" style={{ left: '20%', opacity: 0.4, animationDelay: '0.5s' }}></div>
-        <div className="hero-3d-line line-4" style={{ left: '80%', opacity: 0.4, animationDelay: '0.5s' }}></div>
+        <div className="hero-3d-line line-1" style={{ top: '20%', opacity: 0.3 }}></div>
+        <div className="hero-3d-line line-2" style={{ top: '80%', opacity: 0.3 }}></div>
+        <div className="hero-3d-line line-3" style={{ left: '20%', opacity: 0.3, animationDelay: '0.5s' }}></div>
+        <div className="hero-3d-line line-4" style={{ left: '80%', opacity: 0.3, animationDelay: '0.5s' }}></div>
       </div>
     </div>
   );
 };
 
-// Scroll Animation Hook
 const useScrollAnimation = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -81,12 +77,16 @@ export default function Home() {
 
   useScrollAnimation(); 
 
-  // Load history from localStorage on mount
   useEffect(() => {
     const storedHistory = localStorage.getItem(LOCAL_STORAGE_HISTORY_KEY);
     if (storedHistory) {
       try {
-        setHistoryItems(JSON.parse(storedHistory));
+        const parsedHistory = JSON.parse(storedHistory);
+        if (Array.isArray(parsedHistory)) {
+            setHistoryItems(parsedHistory);
+        } else {
+            setHistoryItems([]);
+        }
       } catch (error) {
         console.error("Failed to parse history from localStorage:", error);
         setHistoryItems([]);
@@ -95,7 +95,7 @@ export default function Home() {
   }, []);
 
   const saveHistoryItem = (item: HistoryItem) => {
-    const updatedHistory = [item, ...historyItems].slice(0, 50); // Keep last 50 items
+    const updatedHistory = [item, ...historyItems].slice(0, 50); 
     setHistoryItems(updatedHistory);
     localStorage.setItem(LOCAL_STORAGE_HISTORY_KEY, JSON.stringify(updatedHistory));
   };
@@ -135,11 +135,8 @@ export default function Home() {
       translatedText: item.translatedText,
     });
     setIsLoading(false);
-    setIsHistoryPanelOpen(false); // Close panel after selection
-    // Optionally, scroll to the simplification form
+    setIsHistoryPanelOpen(false); 
     scrollToSection('simplify');
-    // Update the form fields if SimplificationForm exposes a method or uses a ref
-    // For simplicity, we'll rely on the user re-triggering if they want to modify the loaded text
   };
 
   const handleDeleteHistoryItem = (id: string) => {
@@ -165,7 +162,7 @@ export default function Home() {
               SaySimple
             </h1>
           </Link>
-          <nav className="hidden md:flex gap-4 items-center"> {/* Reduced gap for more items */}
+          <nav className="hidden md:flex gap-4 items-center"> 
             {['hero', 'about', 'services', 'simplify', 'contact'].map((item) => (
               <button
                 key={item}
@@ -190,7 +187,7 @@ export default function Home() {
                 />
               </SheetContent>
             </Sheet>
-            <Button variant="outline" onClick={() => scrollToSection('simplify')} className="border-accent text-accent hover:bg-accent/10 futuristic-glow-accent">Start Simplifying</Button>
+            <Button variant="default" onClick={() => scrollToSection('simplify')} className="futuristic-glow-accent">Simplify & Translate</Button>
           </nav>
           <div className="md:hidden flex items-center gap-2">
             <Sheet open={isHistoryPanelOpen} onOpenChange={setIsHistoryPanelOpen}>
@@ -225,14 +222,14 @@ export default function Home() {
                   {item === 'hero' ? 'Home' : item}
                 </button>
               ))}
-              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 futuristic-glow-accent">Start Simplifying</Button>
+              <Button variant="default" onClick={() => scrollToSection('simplify')} className="w-full mt-2 futuristic-glow-accent">Simplify & Translate</Button>
             </nav>
           </div>
         )}
       </header>
 
       {/* Hero Section */}
-      <section id="hero" className="w-full h-screen flex flex-col items-center justify-center relative text-center px-4 md:px-6 pt-20">
+      <section id="hero" className="w-full h-screen flex flex-col items-center justify-center relative text-center px-4 md:px-6 pt-20 overflow-hidden">
         <Hero3DElement />
         <div className="z-10 relative scroll-animate">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-glow-primary leading-tight">
@@ -243,7 +240,7 @@ export default function Home() {
           </p>
           <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={() => scrollToSection('simplify')} className="futuristic-glow-primary text-lg px-8 py-6 group bg-primary text-primary-foreground hover:bg-primary/90">
-              Start Simplifying <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform"/>
+              Translate and simplify any complex text <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform"/>
             </Button>
             <Button size="lg" variant="outline" onClick={() => scrollToSection('about')} className="text-lg px-8 py-6 border-accent text-accent hover:bg-accent/10 hover:text-accent-foreground futuristic-glow-accent">
               Learn More <ChevronDown className="ml-2 h-5 w-5"/>
@@ -334,7 +331,7 @@ export default function Home() {
                   onResult={handleResult} 
                   initialText={inputTextForOutput} 
                   initialLanguage={targetLanguageForOutput} 
-                  key={`${inputTextForOutput}-${targetLanguageForOutput}`} // Re-render form if loaded from history
+                  key={`${inputTextForOutput}-${targetLanguageForOutput}`} 
                 />
                 {(isLoading || result) && (
                     <OutputDisplay
@@ -402,5 +399,3 @@ export default function Home() {
       </footer>
     </div>
   );
-}
-
