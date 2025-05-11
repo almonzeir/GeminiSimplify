@@ -97,7 +97,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
       toast({ 
         title: "Copied to Clipboard", 
         description: `${type === 'simplified' ? 'Simplified' : 'Translated'} text has been copied.`,
-        className: "bg-background border-primary futuristic-glow-primary text-foreground"
+        className: "bg-background border-primary text-foreground futuristic-glow-primary"
       });
     }).catch(err => {
       console.error("Copy failed:", err);
@@ -115,6 +115,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
 
     setIsExplaining(true);
     setShowExplanation(true); 
+    setExplanationOutput(null); // Clear previous explanation while fetching new one
     
     try {
       const explanationResult = await explainSimplification({ 
@@ -125,7 +126,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
       toast({
         title: `Guidance Generated in ${languageToUse}`,
         description: "AI has provided an explanation and next steps.",
-        className: "bg-background border-accent futuristic-glow-accent text-foreground",
+        className: "bg-background border-accent text-foreground futuristic-glow-accent",
       });
     } catch (error) {
       console.error("Explanation/Guidance failed:", error);
@@ -148,14 +149,14 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
 
   const handleGuidanceLanguageChange = (newLang: string) => {
     setSelectedGuidanceLanguage(newLang);
-    if (showExplanation && result?.simplifiedText && !isExplaining) {
+    if (showExplanation && result?.simplifiedText && !isExplaining) { // Fetch new explanation if already shown
       fetchExplanation(newLang);
     }
   };
 
 
   const OutputCard = ({ title, text, copied, onCopy, isLoadingCard, cardGlowType }: { title: string; text: string | undefined; copied: boolean; onCopy: () => void; isLoadingCard: boolean; cardGlowType: 'primary' | 'accent' }) => (
-    <Card className={`flex-1 bg-card/60 backdrop-blur-sm border-border/40 shadow-lg transition-all duration-300 ease-in-out min-h-[220px] flex flex-col hover:border-${cardGlowType}/60 ${cardGlowType === 'primary' ? 'futuristic-glow-primary' : 'futuristic-glow-accent'} hover:shadow-xl`}>
+    <Card className={`flex-1 bg-card/60 backdrop-blur-sm border-border/40 shadow-xl transition-all duration-300 ease-in-out min-h-[220px] flex flex-col hover:border-${cardGlowType}/60 ${cardGlowType === 'primary' ? 'futuristic-glow-primary' : 'futuristic-glow-accent'} hover:shadow-2xl transform hover:scale-[1.02]`}>
       <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
         <CardTitle className={`text-xl font-semibold ${cardGlowType === 'primary' ? 'text-glow-primary' : 'text-glow-accent'}`}>{title}</CardTitle>
         <Button
@@ -163,7 +164,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
           size="icon"
           onClick={onCopy}
           disabled={isLoadingCard || !text}
-          className={`h-9 w-9 text-muted-foreground hover:text-${cardGlowType} transition-colors duration-200 rounded-full ${cardGlowType === 'primary' ? 'hover:futuristic-glow-primary' : 'hover:futuristic-glow-accent'}`}
+          className={`h-9 w-9 text-muted-foreground hover:text-${cardGlowType} transition-colors duration-200 rounded-full ${cardGlowType === 'primary' ? 'hover:futuristic-glow-primary' : 'hover:futuristic-glow-accent active:scale-90'}`}
           aria-label={`Copy ${title}`}
         >
           {copied ? <Check className={`h-5 w-5 text-green-400`} /> : <Copy className="h-5 w-5" />}
@@ -210,12 +211,12 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
        </div>
 
       {result && !isLoading && (
-         <div className="text-center pt-4">
+         <div className="text-center pt-4 scroll-animate" style={{ animationDelay: '0.2s' }}>
              <Button 
                 onClick={handleExplainButtonClick}
                 variant="outline" 
                 disabled={isExplaining || !result?.simplifiedText} 
-                className="transition-all duration-300 ease-in-out hover:bg-secondary/20 border-primary/50 text-primary hover:text-primary hover:border-primary futuristic-glow-primary hover:shadow-md group px-6 py-3 text-base"
+                className="transition-all duration-300 ease-in-out hover:bg-secondary/20 border-secondary text-secondary hover:text-secondary-foreground hover:border-secondary futuristic-glow-secondary hover:shadow-md group px-6 py-3 text-base transform hover:scale-105"
               >
                  {isExplaining && explanationOutput === null ? ( 
                     <>
@@ -223,7 +224,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                     </>
                  ) : (
                      <>
-                     <HelpCircle className="mr-2 h-5 w-5 text-primary group-hover:text-primary transition-colors"/>
+                     <HelpCircle className="mr-2 h-5 w-5 text-secondary group-hover:text-secondary-foreground transition-colors"/>
                      Explain Situation & Get Advice
                     </>
                  )}
@@ -232,11 +233,11 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
        )}
 
         {(showExplanation || isExplaining) && (
-         <Card className="bg-card/50 backdrop-blur-sm border-border/40 shadow-xl mt-8 transition-all duration-500 ease-in-out animate-in fade-in slide-in-from-bottom-5 futuristic-glow-primary">
+         <Card className="bg-card/50 backdrop-blur-sm border-border/40 shadow-xl mt-8 transition-all duration-500 ease-in-out animate-in fade-in slide-in-from-bottom-5 futuristic-glow-secondary transform hover:scale-[1.01]">
            <CardHeader className="pb-3 pt-5 px-5">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div className="mb-4 sm:mb-0">
-                <CardTitle className="text-xl font-semibold text-glow-primary flex items-center">
+                <CardTitle className="text-xl font-semibold text-glow-secondary flex items-center">
                     <BrainCircuit className="mr-3 h-6 w-6" />
                     AI Guidance
                 </CardTitle>
@@ -250,13 +251,13 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                   disabled={isExplaining}
                   name="guidance-language"
                 >
-                  <SelectTrigger className="w-full bg-input border-border/70 focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm">
-                    <Languages className="mr-2 h-4 w-4 text-primary/70" />
+                  <SelectTrigger className="w-full bg-input border-border/70 focus:border-secondary focus:ring-1 focus:ring-secondary/30 text-sm futuristic-glow-secondary">
+                    <Languages className="mr-2 h-4 w-4 text-secondary/70" />
                     <SelectValue placeholder="Select language" />
                   </SelectTrigger>
                   <SelectContent className="bg-popover border-border/70 text-foreground">
                     {languages.map((lang) => (
-                      <SelectItem key={`guidance-${lang.value}`} value={lang.value} className="hover:bg-primary/20 focus:bg-primary/30 text-sm">
+                      <SelectItem key={`guidance-${lang.value}`} value={lang.value} className="hover:bg-secondary/20 focus:bg-secondary/30 text-sm">
                         {lang.label}
                       </SelectItem>
                     ))}
@@ -270,7 +271,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                <>
                 <div>
                   <div className="flex items-center mb-2">
-                    <HelpCircle className="mr-2 h-5 w-5 text-primary/80"/>
+                    <HelpCircle className="mr-2 h-5 w-5 text-secondary/80"/>
                     <h4 className="text-lg font-medium text-foreground/90">Scenario Explanation</h4>
                   </div>
                   <Skeleton className="h-5 w-full animate-pulse-bg rounded bg-muted/20 mb-1" />
@@ -278,7 +279,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                 </div>
                 <div>
                   <div className="flex items-center mb-2">
-                    <ListChecks className="mr-2 h-5 w-5 text-accent/80"/>
+                    <ListChecks className="mr-2 h-5 w-5 text-secondary/80"/>
                     <h4 className="text-lg font-medium text-foreground/90">Suggested Next Steps</h4>
                   </div>
                   <Skeleton className="h-5 w-full animate-pulse-bg rounded bg-muted/20 mb-1" />
@@ -289,7 +290,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                 <>
                   <div>
                     <div className="flex items-center mb-2">
-                      <HelpCircle className="mr-2 h-5 w-5 text-primary/80"/>
+                      <HelpCircle className="mr-2 h-5 w-5 text-secondary/80"/>
                       <h4 className="text-lg font-medium text-foreground/90">Scenario Explanation (in {selectedGuidanceLanguage})</h4>
                     </div>
                     {explanationOutput.scenarioExplanation.startsWith("Error:") ? (
@@ -304,7 +305,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
                   {explanationOutput.nextSteps && (
                     <div>
                       <div className="flex items-center mb-2">
-                        <ListChecks className="mr-2 h-5 w-5 text-accent/80"/>
+                        <ListChecks className="mr-2 h-5 w-5 text-secondary/80"/>
                         <h4 className="text-lg font-medium text-foreground/90">Suggested Next Steps (in {selectedGuidanceLanguage})</h4>
                       </div>
                       <p className="text-base text-foreground/90 whitespace-pre-wrap leading-relaxed">{explanationOutput.nextSteps}</p>
@@ -314,7 +315,7 @@ export function OutputDisplay({ result, isLoading, inputText, targetLanguage }: 
              ) : (
                 <div className="flex items-center text-muted-foreground/60 py-2">
                     <AlertTriangle className="mr-2 h-5 w-5" />
-                    <span className="text-base">Guidance not available or generation failed. Click button above to try.</span>
+                    <span className="text-base">Guidance not available. Click button above to try generating.</span>
                 </div>
              )}
            </CardContent>

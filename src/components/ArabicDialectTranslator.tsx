@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useTransition } from "react";
@@ -84,7 +85,7 @@ export function ArabicDialectTranslator() {
         toast({
           title: "Translation Complete",
           description: `Text translated from ${values.sourceDialect} to ${values.targetDialect}.`,
-          className: "bg-background border-primary futuristic-glow-primary text-foreground",
+          className: "bg-background border-accent text-foreground futuristic-glow-accent",
         });
       } catch (error) {
         console.error("Arabic dialect translation failed:", error);
@@ -108,10 +109,10 @@ export function ArabicDialectTranslator() {
 
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center space-y-10">
-      <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-accent transition-all duration-300 hover:shadow-2xl hover:border-accent/70">
+      <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-accent transition-all duration-300 hover:shadow-2xl hover:border-accent/70 transform hover:scale-[1.01]">
         <CardHeader className="text-center pb-4 pt-6">
           <div className="flex justify-center items-center mb-2">
-              <MessageSquareQuote className="h-10 w-10 text-accent text-glow-accent" />
+              <MessageSquareQuote className="h-12 w-12 text-accent text-glow-accent" /> {/* Increased icon size */}
           </div>
           <CardTitle className="text-3xl font-bold text-glow-accent tracking-tight">
             Arabic Dialect Bridge
@@ -173,7 +174,7 @@ export function ArabicDialectTranslator() {
                   variant="ghost"
                   size="icon"
                   onClick={swapDialects}
-                  className="mt-0 sm:mt-6 text-accent hover:bg-accent/10 futuristic-glow-accent"
+                  className="mt-0 sm:mt-6 text-accent hover:bg-accent/10 futuristic-glow-accent transform hover:scale-110 active:scale-100 transition-transform duration-200"
                   aria-label="Swap dialects"
                 >
                   <Repeat className="h-5 w-5" />
@@ -210,7 +211,7 @@ export function ArabicDialectTranslator() {
               <Button
                 type="submit"
                 disabled={isPending}
-                className="w-full text-lg py-3 bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-accent/40 shadow-lg futuristic-glow-accent active:shadow-sm"
+                className="w-full text-lg py-3 bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-300 ease-in-out transform hover:scale-[1.02] focus:ring-4 focus:ring-accent/40 shadow-lg futuristic-glow-accent active:shadow-sm active:scale-[1.00]"
               >
                 {isPending ? (
                   <>
@@ -227,7 +228,7 @@ export function ArabicDialectTranslator() {
       </Card>
 
       {(isPending || translationResult) && (
-        <Card className="w-full bg-card/60 backdrop-blur-sm border-border/40 shadow-lg min-h-[150px] futuristic-glow-primary">
+        <Card className="w-full bg-card/60 backdrop-blur-sm border-border/40 shadow-lg min-h-[150px] futuristic-glow-primary transform hover:scale-[1.01] transition-transform duration-300">
           <CardHeader className="pb-2 pt-4 px-4">
             <CardTitle className="text-xl font-semibold text-glow-primary">Translated Text (in {form.getValues("targetDialect")})</CardTitle>
           </CardHeader>

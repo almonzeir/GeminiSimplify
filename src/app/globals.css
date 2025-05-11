@@ -90,21 +90,21 @@ body::before {
   height: 100%;
   z-index: -10; /* Behind everything */
   background:
-    radial-gradient(ellipse at 70% 30%, hsl(var(--primary)/0.05) 0%, transparent 40%), /* Soft Lavender touch */
-    radial-gradient(ellipse at 30% 70%, hsl(var(--accent)/0.05) 0%, transparent 40%), /* Deep Teal touch */
-    radial-gradient(ellipse at 50% 50%, hsl(var(--secondary)/0.03) 0%, transparent 30%); /* Light Peach touch */
-  opacity: 0.5; /* Reduced opacity for subtlety */
-  animation: subtle-pulse 25s infinite alternate ease-in-out;
+    radial-gradient(ellipse at 70% 30%, hsl(var(--primary)/0.03) 0%, transparent 50%), /* Reduced spread */
+    radial-gradient(ellipse at 30% 70%, hsl(var(--accent)/0.03) 0%, transparent 50%), /* Reduced spread */
+    radial-gradient(ellipse at 50% 50%, hsl(var(--secondary)/0.02) 0%, transparent 40%); /* Reduced spread */
+  opacity: 0.4; /* Reduced opacity for more subtlety */
+  animation: subtle-pulse 30s infinite alternate ease-in-out; /* Slower animation */
 }
 
 @keyframes subtle-pulse {
-  0% { transform: scale(1); opacity: 0.4; }
-  50% { transform: scale(1.03); opacity: 0.6; }
-  100% { transform: scale(1); opacity: 0.4; }
+  0% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.02); opacity: 0.5; } /* Less intense scale */
+  100% { transform: scale(1); opacity: 0.3; }
 }
 
 
-/* Minimalist animated lines for a techy feel - reduced for performance */
+/* Minimalist animated lines for a techy feel - further reduced for performance */
 .animated-lines-bg {
   position: fixed;
   top: 0;
@@ -119,22 +119,22 @@ body::before {
 .animated-lines-bg::before {
   content: '';
   position: absolute;
-  width: 150%; /* Reduced size */
-  height: 150%;
-  top: -25%;
-  left: -25%;
+  width: 200%; /* Larger to ensure coverage during movement */
+  height: 200%;
+  top: -50%;
+  left: -50%;
   background-image:
-    linear-gradient(hsl(var(--primary)/0.03) 1px, transparent 1px), /* Slightly more visible lines */
-    linear-gradient(90deg, hsl(var(--primary)/0.03) 1px, transparent 1px);
-  background-size: 60px 60px; /* Larger grid for less density */
-  animation: moveLines 80s linear infinite;
-  opacity: 0.25; /* Slightly increased opacity */
+    linear-gradient(hsl(var(--primary)/0.015) 1px, transparent 1px), /* Even softer lines */
+    linear-gradient(90deg, hsl(var(--primary)/0.015) 1px, transparent 1px);
+  background-size: 70px 70px; /* Even larger grid for less density */
+  animation: moveLines 120s linear infinite; /* Slower animation */
+  opacity: 0.15; /* Further reduced opacity */
 }
 
 
 @keyframes moveLines {
   0% { transform: translate(0, 0); }
-  100% { transform: translate(-33.33%, -33.33%); } /* Adjusted for new size */
+  100% { transform: translate(-25%, -25%); } /* Adjusted for new size */
 }
 
 /* Hero section 3D simulated element styling */
@@ -147,43 +147,45 @@ body::before {
   transform: translate(-50%, -50%) perspective(1000px);
   z-index: 0;
   pointer-events: none;
+  transition: transform 0.1s linear; /* Smoother mouse follow */
 }
 
 .hero-3d-plane {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 1px solid hsla(var(--primary), 0.3);
-  border-radius: 10px;
-  background: radial-gradient(ellipse at center, hsla(var(--primary), 0.1) 0%, transparent 70%);
-  box-shadow: 0 0 15px hsla(var(--primary), 0.2), 0 0 30px hsla(var(--primary), 0.1);
-  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  border: 1px solid hsla(var(--primary), 0.2); /* More subtle border */
+  border-radius: 12px; /* Slightly more rounded */
+  background: radial-gradient(ellipse at center, hsla(var(--primary), 0.05) 0%, transparent 60%); /* Softer gradient */
+  box-shadow: 0 0 10px hsla(var(--primary), 0.15), 0 0 20px hsla(var(--primary), 0.05); /* Softer shadow */
+  transition: transform 0.4s ease-out, box-shadow 0.4s ease-out; /* Slightly longer transition */
   transform-style: preserve-3d;
 }
 
-.hero-3d-element:hover .hero-3d-plane {
-   box-shadow: 0 0 25px hsla(var(--primary), 0.4), 0 0 50px hsla(var(--primary), 0.2);
+.group:hover .hero-3d-element .hero-3d-plane { /* Target via group hover on hero section */
+   box-shadow: 0 0 20px hsla(var(--primary), 0.3), 0 0 40px hsla(var(--primary), 0.15); /* Enhanced hover shadow */
 }
 
 
 /* Lines inside the plane for more depth */
 .hero-3d-line {
   position: absolute;
-  background-color: hsla(var(--accent), 0.5);
-  box-shadow: 0 0 5px hsla(var(--accent), 0.3);
-  transition: transform 0.5s ease-out;
+  background-color: hsla(var(--accent), 0.4); /* Slightly less opaque */
+  box-shadow: 0 0 3px hsla(var(--accent), 0.2); /* Softer shadow */
+  transition: transform 0.6s ease-out; /* Slightly longer transition for effect */
+  opacity: 0.6;
 }
 
-.line-1 { width: 100%; height: 1px; top: 25%; transform: rotateX(30deg) translateZ(20px); }
-.line-2 { width: 100%; height: 1px; top: 75%; transform: rotateX(-30deg) translateZ(20px); }
-.line-3 { width: 1px; height: 100%; left: 25%; transform: rotateY(-30deg) translateZ(20px); }
-.line-4 { width: 1px; height: 100%; left: 75%; transform: rotateY(30deg) translateZ(20px); }
+.line-1 { width: 100%; height: 1px; top: 20%; transform: rotateX(25deg) translateZ(15px); opacity: 0.5; }
+.line-2 { width: 100%; height: 1px; top: 80%; transform: rotateX(-25deg) translateZ(15px); opacity: 0.5; }
+.line-3 { width: 1px; height: 100%; left: 20%; transform: rotateY(-25deg) translateZ(15px); opacity: 0.5; animation-delay: 0.2s; }
+.line-4 { width: 1px; height: 100%; left: 80%; transform: rotateY(25deg) translateZ(15px); opacity: 0.5; animation-delay: 0.2s; }
 
 /* Scroll-triggered animation base */
 .scroll-animate {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform: translateY(30px); /* Slightly more pronounced initial offset */
+  transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); /* Smoother easing */
 }
 
 .scroll-animate.in-view {
@@ -191,73 +193,86 @@ body::before {
   transform: translateY(0);
 }
 
-/* Futuristic glow effects for elements */
-.futuristic-glow-primary {
-  box-shadow: 0 0 6px hsl(var(--primary)/0.4), /* Base glow */
-              0 0 12px hsl(var(--primary)/0.2);
-  /* Add a subtle border that contributes to the glow effect, uses the primary color */
-  border: 1px solid hsl(var(--primary)/0.3);
-  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+/* Futuristic glow effects for elements - Refined */
+.futuristic-glow {
+  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
-/* Enhance glow on hover/focus */
-.futuristic-glow-primary:hover, .futuristic-glow-primary:focus-visible,
-.group:hover .futuristic-glow-primary, .group:focus-visible .futuristic-glow-primary {
-   box-shadow: 0 0 8px hsl(var(--primary)/0.6),
-              0 0 15px hsl(var(--primary)/0.4),
-              0 0 25px hsl(var(--primary)/0.2);
-  border-color: hsl(var(--primary)/0.6); /* Make border slightly more prominent on hover */
+
+.futuristic-glow-primary {
+  box-shadow: 0 0 2px hsl(var(--primary)/0.3), 0 0 4px hsl(var(--primary)/0.2);
+  border: 1px solid hsl(var(--primary)/0.2);
+}
+.group:hover .futuristic-glow-primary, .futuristic-glow-primary:hover, .futuristic-glow-primary:focus-visible {
+   box-shadow: 0 0 6px hsl(var(--primary)/0.6),
+              0 0 12px hsl(var(--primary)/0.4),
+              0 0 20px hsl(var(--primary)/0.2);
+  border-color: hsl(var(--primary)/0.5);
+  /* transform: translateY(-1px); */ /* Subtle lift */
 }
 
 .futuristic-glow-accent {
-  box-shadow: 0 0 6px hsl(var(--accent)/0.4),
-              0 0 12px hsl(var(--accent)/0.2);
-  border: 1px solid hsl(var(--accent)/0.3);
-  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  box-shadow: 0 0 2px hsl(var(--accent)/0.3), 0 0 4px hsl(var(--accent)/0.2);
+  border: 1px solid hsl(var(--accent)/0.2);
 }
-.futuristic-glow-accent:hover, .futuristic-glow-accent:focus-visible,
-.group:hover .futuristic-glow-accent, .group:focus-visible .futuristic-glow-accent {
-   box-shadow: 0 0 8px hsl(var(--accent)/0.6),
-              0 0 15px hsl(var(--accent)/0.4),
-              0 0 25px hsl(var(--accent)/0.2);
-  border-color: hsl(var(--accent)/0.6);
+.group:hover .futuristic-glow-accent, .futuristic-glow-accent:hover, .futuristic-glow-accent:focus-visible {
+   box-shadow: 0 0 6px hsl(var(--accent)/0.6),
+              0 0 12px hsl(var(--accent)/0.4),
+              0 0 20px hsl(var(--accent)/0.2);
+  border-color: hsl(var(--accent)/0.5);
+  /* transform: translateY(-1px); */
 }
 
 .futuristic-glow-secondary {
-  box-shadow: 0 0 6px hsl(var(--secondary)/0.4),
-              0 0 12px hsl(var(--secondary)/0.2);
-  border: 1px solid hsl(var(--secondary)/0.3);
-  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  box-shadow: 0 0 2px hsl(var(--secondary)/0.3), 0 0 4px hsl(var(--secondary)/0.2);
+  border: 1px solid hsl(var(--secondary)/0.2);
 }
-.futuristic-glow-secondary:hover, .futuristic-glow-secondary:focus-visible,
-.group:hover .futuristic-glow-secondary, .group:focus-visible .futuristic-glow-secondary {
-   box-shadow: 0 0 8px hsl(var(--secondary)/0.6),
-              0 0 15px hsl(var(--secondary)/0.4),
-              0 0 25px hsl(var(--secondary)/0.2);
-  border-color: hsl(var(--secondary)/0.6);
+.group:hover .futuristic-glow-secondary, .futuristic-glow-secondary:hover, .futuristic-glow-secondary:focus-visible {
+   box-shadow: 0 0 6px hsl(var(--secondary)/0.6),
+              0 0 12px hsl(var(--secondary)/0.4),
+              0 0 20px hsl(var(--secondary)/0.2);
+  border-color: hsl(var(--secondary)/0.5);
+  /* transform: translateY(-1px); */
 }
 
 
-/* Text glows (mostly for titles/headings) */
+/* Text glows (mostly for titles/headings) - Softer base */
 .text-glow-primary {
-  text-shadow: 0 0 4px hsl(var(--primary)/0.6), /* Softer base */
-               0 0 8px hsl(var(--primary)/0.3); /* Wider, fainter glow */
+  text-shadow: 0 0 5px hsl(var(--primary)/0.5), /* Softer base */
+               0 0 10px hsl(var(--primary)/0.25); /* Wider, fainter glow */
+  transition: text-shadow 0.3s ease-in-out;
 }
+.group:hover .text-glow-primary, .text-glow-primary:hover {
+  text-shadow: 0 0 8px hsl(var(--primary)/0.7),
+               0 0 15px hsl(var(--primary)/0.35);
+}
+
 .text-glow-accent {
-  text-shadow: 0 0 4px hsl(var(--accent)/0.6),
-               0 0 8px hsl(var(--accent)/0.3);
+  text-shadow: 0 0 5px hsl(var(--accent)/0.5),
+               0 0 10px hsl(var(--accent)/0.25);
+  transition: text-shadow 0.3s ease-in-out;
 }
+.group:hover .text-glow-accent, .text-glow-accent:hover {
+  text-shadow: 0 0 8px hsl(var(--accent)/0.7),
+               0 0 15px hsl(var(--accent)/0.35);
+}
+
 .text-glow-secondary {
-  text-shadow: 0 0 4px hsl(var(--secondary)/0.6),
-               0 0 8px hsl(var(--secondary)/0.3);
+  text-shadow: 0 0 5px hsl(var(--secondary)/0.5),
+               0 0 10px hsl(var(--secondary)/0.25);
+  transition: text-shadow 0.3s ease-in-out;
+}
+.group:hover .text-glow-secondary, .text-glow-secondary:hover {
+  text-shadow: 0 0 8px hsl(var(--secondary)/0.7),
+               0 0 15px hsl(var(--secondary)/0.35);
 }
 
 
-/* Add subtle animation for loading */
-@keyframes pulse-bg {
-  0%, 100% { background-color: hsl(var(--muted) / 0.1); }
-  50% { background-color: hsl(var(--muted) / 0.2); } /* Slightly less intense pulse */
+/* Add subtle animation for loading skeletons */
+@keyframes pulse-bg-themed {
+  0%, 100% { background-color: hsl(var(--muted) / 0.2); } /* Thematic muted color */
+  50% { background-color: hsl(var(--muted) / 0.35); } /* Slightly more intense pulse */
 }
 
 .animate-pulse-bg {
-  animation: pulse-bg 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-bg-themed 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

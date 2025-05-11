@@ -106,7 +106,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
         toast({
           title: "Process Complete",
           description: "Text successfully simplified and translated.",
-          className: "bg-background border-primary futuristic-glow-primary text-foreground",
+          className: "bg-background border-primary text-foreground futuristic-glow-primary",
         });
       } catch (error) {
         console.error("Simplification failed:", error);
@@ -130,7 +130,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
         toast({
           title: "Suggestion Loaded",
           description: "Example text populated.",
-           className: "bg-background border-accent futuristic-glow-accent text-foreground", 
+           className: "bg-background border-accent text-foreground futuristic-glow-accent", 
         });
       } catch (error) {
         console.error("Suggestion failed:", error);
@@ -145,10 +145,10 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
   }
 
   return (
-    <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-primary transition-all duration-300 hover:shadow-2xl hover:border-primary/70">
+    <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-primary transition-all duration-300 hover:shadow-2xl hover:border-primary/70 transform hover:scale-[1.01]">
       <CardHeader className="text-center pb-4 pt-6">
         <div className="flex justify-center items-center mb-2">
-            <Wand2 className="h-8 w-8 text-primary text-glow-primary" />
+            <Wand2 className="h-10 w-10 text-primary text-glow-primary" /> {/* Increased icon size */}
         </div>
         <CardTitle className="text-3xl font-bold text-glow-primary tracking-tight">
           Simplify & Translate
@@ -209,7 +209,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
                 variant="outline"
                 onClick={handleSuggestText}
                 disabled={isSuggesting}
-                className="w-full sm:w-auto transition-all duration-200 ease-in-out border-accent text-accent hover:bg-accent/10 hover:text-accent-foreground hover:border-accent futuristic-glow-accent shadow-md"
+                className="w-full sm:w-auto transition-all duration-300 ease-in-out border-accent text-accent hover:bg-accent/10 hover:text-accent-foreground hover:border-accent futuristic-glow-accent shadow-md transform hover:scale-105"
               >
                 {isSuggesting ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -223,7 +223,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:shadow-sm"
+              className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 ease-in-out transform hover:scale-[1.02] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:shadow-sm active:scale-[1.00]"
             >
               {isPending ? (
                 <>
