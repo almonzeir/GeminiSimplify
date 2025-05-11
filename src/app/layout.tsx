@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -10,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'SaySimple', // Updated app name
-  description: 'Simplify and translate text with AI using a modern, clean interface.', // Updated description
+  title: 'SaySimple',
+  description: 'Simplify and translate text with AI using a modern, clean interface.',
 };
 
 export default function RootLayout({
@@ -20,7 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark"> {/* Dark theme is default */}
+    <html lang="en" className="dark">
+      {/* Head content is automatically managed by Next.js based on metadata and conventions */}
       <body className={`${inter.variable} antialiased font-sans bg-background text-foreground`}>
         <div className="animated-lines-bg" aria-hidden="true"></div>
         {children}
