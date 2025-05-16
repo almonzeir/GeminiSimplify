@@ -44,9 +44,18 @@ const prompt = ai.definePrompt({
 const suggestInputTextFlow = ai.defineFlow<z.ZodObject<{} extends z.ZodTypeAny ? {} : z.infer<z.ZodObject<{}>>>, typeof SuggestInputTextOutputSchema>(
   {
     name: 'suggestInputTextFlow',
+    inputSchema: z.object({}), // Explicitly empty object schema for clarity
+    outputSchema: SuggestInputTextOutputSchema,
   },
   async () => {
     const {output} = await prompt({});
-    return output!;
+    if (!output || typeof output.suggestedText !== 'string') {
+      console.error("AI output for suggested text was not in the expected format:", output);
+      // Provide a fallback or a more informative error structure
+      return {
+        suggestedText: "Error: Could not generate suggested text at this time. Please try again."
+      };
+    }
+    return output;
   }
 );

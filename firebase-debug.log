@@ -1,0 +1,38 @@
+[debug] [2025-05-15T15:28:16.087Z] ----------------------------------------------------------------------
+[debug] [2025-05-15T15:28:16.094Z] Command:       /nix/store/rbdrkcs5kkwpalxcd7c6bnm33lk2955n-nodejs-20.19.0/bin/node /nix/store/x1y0l2xj62jgmz6csprhhqzibvdggdpk-firebase-tools-14.3.1/lib/node_modules/firebase-tools/lib/bin/firebase.js deploy --only hosting
+[debug] [2025-05-15T15:28:16.095Z] CLI Version:   14.3.1
+[debug] [2025-05-15T15:28:16.095Z] Platform:      linux
+[debug] [2025-05-15T15:28:16.095Z] Node Version:  v20.19.0
+[debug] [2025-05-15T15:28:16.096Z] Time:          Thu May 15 2025 15:28:16 GMT+0000 (Coordinated Universal Time)
+[debug] [2025-05-15T15:28:16.096Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-15T15:28:16.786Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-15T15:28:16.787Z] > authorizing via signed-in user (monzeer2002@gmail.com)
+[debug] [2025-05-15T15:28:16.787Z] [iam] checking project saysimple-7db3e for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-15T15:28:16.790Z] Checked if tokens are valid: false, expires at: 1747323453278
+[debug] [2025-05-15T15:28:16.790Z] Checked if tokens are valid: false, expires at: 1747323453278
+[debug] [2025-05-15T15:28:16.791Z] > refreshing access token with scopes: []
+[debug] [2025-05-15T15:28:16.795Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-05-15T15:28:16.795Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-05-15T15:28:17.010Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-05-15T15:28:17.011Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-05-15T15:28:17.052Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/saysimple-7db3e:testIamPermissions [none]
+[debug] [2025-05-15T15:28:17.053Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/saysimple-7db3e:testIamPermissions x-goog-quota-user=projects/saysimple-7db3e
+[debug] [2025-05-15T15:28:17.053Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/saysimple-7db3e:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-15T15:28:17.832Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/saysimple-7db3e:testIamPermissions 200
+[debug] [2025-05-15T15:28:17.832Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/saysimple-7db3e:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-15T15:28:17.834Z] Checked if tokens are valid: true, expires at: 1747326496012
+[debug] [2025-05-15T15:28:17.834Z] Checked if tokens are valid: true, expires at: 1747326496012
+[debug] [2025-05-15T15:28:17.836Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/saysimple-7db3e [none]
+[debug] [2025-05-15T15:28:18.105Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/saysimple-7db3e 200
+[debug] [2025-05-15T15:28:18.108Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/saysimple-7db3e {"projectId":"saysimple-7db3e","projectNumber":"696599317793","displayName":"saysimple","name":"projects/saysimple-7db3e","resources":{"hostingSite":"saysimple-7db3e"},"state":"ACTIVE","etag":"1_478c17ee-501f-4aa1-981b-b956985c5ba8"}
+[debug] [2025-05-15T15:28:28.685Z] SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at findDependency (/nix/store/x1y0l2xj62jgmz6csprhhqzibvdggdpk-firebase-tools-14.3.1/lib/node_modules/firebase-tools/lib/frameworks/utils.js:190:23)
+    at prepareFrameworks (/nix/store/x1y0l2xj62jgmz6csprhhqzibvdggdpk-firebase-tools-14.3.1/lib/node_modules/firebase-tools/lib/frameworks/index.js:128:67)
+    at deploy (/nix/store/x1y0l2xj62jgmz6csprhhqzibvdggdpk-firebase-tools-14.3.1/lib/node_modules/firebase-tools/lib/deploy/index.js:76:50)
+    at Command.actionFn (/nix/store/x1y0l2xj62jgmz6csprhhqzibvdggdpk-firebase-tools-14.3.1/lib/node_modules/firebase-tools/lib/commands/deploy.js:136:32)
+    at /nix/store/x1y0l2xj62jgmz6csprhhqzibvdggdpk-firebase-tools-14.3.1/lib/node_modules/firebase-tools/lib/command.js:243:25
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: An unexpected error has occurred.

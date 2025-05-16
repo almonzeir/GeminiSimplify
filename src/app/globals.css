@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,65 +9,67 @@ body {
 
 @layer base {
   :root {
-    /* Dark, Futuristic Theme with Neon Accents */
-    --background: 220 20% 5%; /* Deep, dark blue-black / Charcoal */
-    --foreground: 210 40% 98%; /* Bright, near-white for text */
+    /* Dark, Futuristic Theme with Neon Accents - Refined */
+    --background: 220 20% 3%; /* Even darker base for more depth */
+    --foreground: 210 50% 98%; /* Slightly brighter foreground for better contrast */
 
-    --card: 220 20% 10%; /* Darker card for subtle separation */
-    --card-foreground: 210 40% 95%;
+    --card: 220 20% 8%; /* Slightly lighter card for better separation */
+    --card-foreground: 210 45% 96%;
 
-    --popover: 220 20% 8%; /* Dark popover */
-    --popover-foreground: 210 40% 95%;
+    --popover: 220 20% 6%; /* Darker popover */
+    --popover-foreground: 210 45% 96%;
 
-    --primary: 258 90% 65%; /* Soft Lavender / Primary app color */
-    --primary-foreground: 210 40% 98%; /* White text on primary buttons */
+    --primary: 260 95% 70%; /* More vibrant Soft Lavender */
+    --primary-foreground: 220 20% 99%; /* Ensure high contrast on primary */
 
-    --secondary: 30 100% 70%; /* Light Peach / Secondary app color */
-    --secondary-foreground: 220 20% 10%; /* Dark text on secondary elements */
+    --secondary: 35 100% 65%; /* Slightly more saturated Light Peach */
+    --secondary-foreground: 220 20% 8%; /* Ensure dark text on secondary */
 
-    --muted: 220 15% 20%; /* Muted for subtle backgrounds or text */
-    --muted-foreground: 220 10% 60%; /* Softer muted text */
+    --muted: 220 15% 15%; /* Darker muted for subtle elements */
+    --muted-foreground: 220 10% 55%; /* Softer muted text */
 
-    --accent: 180 100% 40%; /* Deep Teal / Accent app color */
-    --accent-foreground: 0 0% 100%; /* White text on accent elements */
+    --accent: 175 100% 45%; /* More vibrant Deep Teal */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 70% 55%; /* Destructive action color */
+    --destructive: 0 75% 60%; /* Slightly more vibrant destructive */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 180 100% 30%; /* Deep Teal border, can be used for subtle glowing effects */
-    --input: 220 20% 12%; /* Dark input background */
-    --ring: 180 100% 55%; /* Deep Teal for focus rings, slightly brighter */
+    --border: 180 100% 25%; /* Darker, more subtle border */
+    --input: 220 20% 9%; /* Slightly lighter input background */
+    --input-border: 220 20% 18%; /* Defined input border */
+    --ring: 175 100% 60%; /* Brighter accent for focus rings */
 
-    --chart-1: 258 90% 65%;
-    --chart-2: 30 100% 70%;
-    --chart-3: 180 100% 40%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 260 95% 70%;
+    --chart-2: 35 100% 65%;
+    --chart-3: 175 100% 45%;
+    --chart-4: 45 80% 60%; /* Adjusted for vibrancy */
+    --chart-5: 25 90% 60%; /* Adjusted for vibrancy */
 
-    --radius: 0.5rem; /* Slightly smaller radius for a sharper tech look */
+    --radius: 0.6rem; /* Slightly larger radius for softer feel */
   }
 
   .dark {
     /* Dark theme is the default, so these can mirror the root */
-    --background: 220 20% 5%;
-    --foreground: 210 40% 98%;
-    --card: 220 20% 10%;
-    --card-foreground: 210 40% 95%;
-    --popover: 220 20% 8%;
-    --popover-foreground: 210 40% 95%;
-    --primary: 258 90% 65%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 30 100% 70%;
-    --secondary-foreground: 220 20% 10%;
-    --muted: 220 15% 20%;
-    --muted-foreground: 220 10% 60%;
-    --accent: 180 100% 40%;
+    --background: 220 20% 3%;
+    --foreground: 210 50% 98%;
+    --card: 220 20% 8%;
+    --card-foreground: 210 45% 96%;
+    --popover: 220 20% 6%;
+    --popover-foreground: 210 45% 96%;
+    --primary: 260 95% 70%;
+    --primary-foreground: 220 20% 99%;
+    --secondary: 35 100% 65%;
+    --secondary-foreground: 220 20% 8%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 175 100% 45%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 55%;
+    --destructive: 0 75% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 180 100% 30%;
-    --input: 220 20% 12%;
-    --ring: 180 100% 55%;
+    --border: 180 100% 25%;
+    --input: 220 20% 9%;
+    --input-border: 220 20% 18%;
+    --ring: 175 100% 60%;
   }
 }
 
@@ -80,7 +83,7 @@ body {
   }
 }
 
-/* Subtle animated background using pseudo-elements or gradients */
+/* Subtle animated background using pseudo-elements or gradients - Refined */
 body::before {
   content: "";
   position: fixed;
@@ -88,104 +91,104 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -10; /* Behind everything */
+  z-index: -10;
   background:
-    radial-gradient(ellipse at 70% 30%, hsl(var(--primary)/0.03) 0%, transparent 50%), /* Reduced spread */
-    radial-gradient(ellipse at 30% 70%, hsl(var(--accent)/0.03) 0%, transparent 50%), /* Reduced spread */
-    radial-gradient(ellipse at 50% 50%, hsl(var(--secondary)/0.02) 0%, transparent 40%); /* Reduced spread */
-  opacity: 0.4; /* Reduced opacity for more subtlety */
-  animation: subtle-pulse 30s infinite alternate ease-in-out; /* Slower animation */
+    radial-gradient(ellipse at 70% 30%, hsl(var(--primary)/0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 70%, hsl(var(--accent)/0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, hsl(var(--secondary)/0.02) 0%, transparent 40%);
+  opacity: 0.35; /* Slightly adjusted opacity */
+  animation: subtle-pulse 35s infinite alternate ease-in-out; /* Slower, more gentle */
 }
 
 @keyframes subtle-pulse {
   0% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.02); opacity: 0.5; } /* Less intense scale */
+  50% { transform: scale(1.02); opacity: 0.45; } /* Less intense scale, slightly more opacity swing */
   100% { transform: scale(1); opacity: 0.3; }
 }
 
 
-/* Minimalist animated lines for a techy feel - further reduced for performance */
+/* Minimalist animated lines for a techy feel - Refined for subtlety */
 .animated-lines-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -9; /* Behind content, above body::before */
+  z-index: -9;
   overflow: hidden;
-  pointer-events: none; /* Ensure it doesn't interfere with interaction */
+  pointer-events: none;
 }
 
 .animated-lines-bg::before {
   content: '';
   position: absolute;
-  width: 200%; /* Larger to ensure coverage during movement */
+  width: 200%;
   height: 200%;
   top: -50%;
   left: -50%;
   background-image:
-    linear-gradient(hsl(var(--primary)/0.015) 1px, transparent 1px), /* Even softer lines */
-    linear-gradient(90deg, hsl(var(--primary)/0.015) 1px, transparent 1px);
-  background-size: 70px 70px; /* Even larger grid for less density */
-  animation: moveLines 120s linear infinite; /* Slower animation */
-  opacity: 0.15; /* Further reduced opacity */
+    linear-gradient(hsl(var(--primary)/0.01) 1px, transparent 1px), /* Even fainter lines */
+    linear-gradient(90deg, hsl(var(--primary)/0.01) 1px, transparent 1px);
+  background-size: 80px 80px; /* Slightly larger grid for more sparseness */
+  animation: moveLines 150s linear infinite; /* Very slow animation */
+  opacity: 0.1; /* Extremely subtle */
 }
 
 
 @keyframes moveLines {
   0% { transform: translate(0, 0); }
-  100% { transform: translate(-25%, -25%); } /* Adjusted for new size */
+  100% { transform: translate(-25%, -25%); }
 }
 
-/* Hero section 3D simulated element styling */
+/* Hero section 3D simulated element styling - Refined */
 .hero-3d-element {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 70vmin;
-  height: 70vmin;
-  transform: translate(-50%, -50%) perspective(1000px);
+  width: 75vmin; /* Slightly larger for more impact */
+  height: 75vmin;
+  transform: translate(-50%, -50%) perspective(1200px); /* Increased perspective */
   z-index: 0;
   pointer-events: none;
-  transition: transform 0.1s linear; /* Smoother mouse follow */
+  transition: transform 0.15s linear; /* Slightly smoother mouse follow */
 }
 
 .hero-3d-plane {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 1px solid hsla(var(--primary), 0.2); /* More subtle border */
-  border-radius: 12px; /* Slightly more rounded */
-  background: radial-gradient(ellipse at center, hsla(var(--primary), 0.05) 0%, transparent 60%); /* Softer gradient */
-  box-shadow: 0 0 10px hsla(var(--primary), 0.15), 0 0 20px hsla(var(--primary), 0.05); /* Softer shadow */
-  transition: transform 0.4s ease-out, box-shadow 0.4s ease-out; /* Slightly longer transition */
+  border: 1px solid hsla(var(--primary), 0.25); /* Slightly more visible border */
+  border-radius: 16px; /* Softer radius */
+  background: radial-gradient(ellipse at center, hsla(var(--primary), 0.07) 0%, transparent 65%); /* Softer, wider gradient */
+  box-shadow: 0 0 12px hsla(var(--primary), 0.2), 0 0 25px hsla(var(--primary), 0.1); /* Softer base shadow */
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother easing */
   transform-style: preserve-3d;
 }
 
-.group:hover .hero-3d-element .hero-3d-plane { /* Target via group hover on hero section */
-   box-shadow: 0 0 20px hsla(var(--primary), 0.3), 0 0 40px hsla(var(--primary), 0.15); /* Enhanced hover shadow */
+.group:hover .hero-3d-element .hero-3d-plane {
+   box-shadow: 0 0 20px hsla(var(--primary), 0.35), 0 0 45px hsla(var(--primary), 0.2); /* Enhanced hover shadow */
 }
 
 
-/* Lines inside the plane for more depth */
+/* Lines inside the plane for more depth - Refined */
 .hero-3d-line {
   position: absolute;
-  background-color: hsla(var(--accent), 0.4); /* Slightly less opaque */
-  box-shadow: 0 0 3px hsla(var(--accent), 0.2); /* Softer shadow */
-  transition: transform 0.6s ease-out; /* Slightly longer transition for effect */
-  opacity: 0.6;
+  background-color: hsla(var(--accent), 0.45); /* Slightly adjusted opacity */
+  box-shadow: 0 0 4px hsla(var(--accent), 0.25); /* Softer shadow */
+  transition: transform 0.65s ease-out;
+  opacity: 0.55;
 }
 
-.line-1 { width: 100%; height: 1px; top: 20%; transform: rotateX(25deg) translateZ(15px); opacity: 0.5; }
-.line-2 { width: 100%; height: 1px; top: 80%; transform: rotateX(-25deg) translateZ(15px); opacity: 0.5; }
-.line-3 { width: 1px; height: 100%; left: 20%; transform: rotateY(-25deg) translateZ(15px); opacity: 0.5; animation-delay: 0.2s; }
-.line-4 { width: 1px; height: 100%; left: 80%; transform: rotateY(25deg) translateZ(15px); opacity: 0.5; animation-delay: 0.2s; }
+.line-1 { width: 100%; height: 1px; top: 20%; transform: rotateX(28deg) translateZ(18px); opacity: 0.45; }
+.line-2 { width: 100%; height: 1px; top: 80%; transform: rotateX(-28deg) translateZ(18px); opacity: 0.45; }
+.line-3 { width: 1px; height: 100%; left: 20%; transform: rotateY(-28deg) translateZ(18px); opacity: 0.45; }
+.line-4 { width: 1px; height: 100%; left: 80%; transform: rotateY(28deg) translateZ(18px); opacity: 0.45; }
 
-/* Scroll-triggered animation base */
+/* Scroll-triggered animation base - Refined */
 .scroll-animate {
   opacity: 0;
-  transform: translateY(30px); /* Slightly more pronounced initial offset */
-  transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); /* Smoother easing */
+  transform: translateY(35px); /* Slightly more pronounced initial offset */
+  transition: opacity 0.75s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.75s cubic-bezier(0.165, 0.84, 0.44, 1); /* Smoother, slightly longer easing */
 }
 
 .scroll-animate.in-view {
@@ -193,86 +196,111 @@ body::before {
   transform: translateY(0);
 }
 
-/* Futuristic glow effects for elements - Refined */
+/* Futuristic glow effects for elements - Standardized & Refined */
 .futuristic-glow {
-  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  transition: box-shadow 0.35s ease-in-out, border-color 0.35s ease-in-out, transform 0.25s ease-in-out;
+  border: 1px solid transparent; /* Base transparent border for smooth transition */
 }
 
 .futuristic-glow-primary {
-  box-shadow: 0 0 2px hsl(var(--primary)/0.3), 0 0 4px hsl(var(--primary)/0.2);
-  border: 1px solid hsl(var(--primary)/0.2);
+  box-shadow: 0 0 3px hsl(var(--primary)/0.25), 0 0 5px hsl(var(--primary)/0.15);
+  border-color: hsl(var(--primary)/0.15);
 }
 .group:hover .futuristic-glow-primary, .futuristic-glow-primary:hover, .futuristic-glow-primary:focus-visible {
-   box-shadow: 0 0 6px hsl(var(--primary)/0.6),
-              0 0 12px hsl(var(--primary)/0.4),
-              0 0 20px hsl(var(--primary)/0.2);
-  border-color: hsl(var(--primary)/0.5);
-  /* transform: translateY(-1px); */ /* Subtle lift */
+   box-shadow: 0 0 7px hsl(var(--primary)/0.5),
+              0 0 14px hsl(var(--primary)/0.35),
+              0 0 22px hsl(var(--primary)/0.2);
+  border-color: hsl(var(--primary)/0.4);
 }
 
 .futuristic-glow-accent {
-  box-shadow: 0 0 2px hsl(var(--accent)/0.3), 0 0 4px hsl(var(--accent)/0.2);
-  border: 1px solid hsl(var(--accent)/0.2);
+  box-shadow: 0 0 3px hsl(var(--accent)/0.25), 0 0 5px hsl(var(--accent)/0.15);
+  border-color: hsl(var(--accent)/0.15);
 }
 .group:hover .futuristic-glow-accent, .futuristic-glow-accent:hover, .futuristic-glow-accent:focus-visible {
-   box-shadow: 0 0 6px hsl(var(--accent)/0.6),
-              0 0 12px hsl(var(--accent)/0.4),
-              0 0 20px hsl(var(--accent)/0.2);
-  border-color: hsl(var(--accent)/0.5);
-  /* transform: translateY(-1px); */
+   box-shadow: 0 0 7px hsl(var(--accent)/0.5),
+              0 0 14px hsl(var(--accent)/0.35),
+              0 0 22px hsl(var(--accent)/0.2);
+  border-color: hsl(var(--accent)/0.4);
 }
 
 .futuristic-glow-secondary {
-  box-shadow: 0 0 2px hsl(var(--secondary)/0.3), 0 0 4px hsl(var(--secondary)/0.2);
-  border: 1px solid hsl(var(--secondary)/0.2);
+  box-shadow: 0 0 3px hsl(var(--secondary)/0.25), 0 0 5px hsl(var(--secondary)/0.15);
+  border-color: hsl(var(--secondary)/0.15);
 }
 .group:hover .futuristic-glow-secondary, .futuristic-glow-secondary:hover, .futuristic-glow-secondary:focus-visible {
-   box-shadow: 0 0 6px hsl(var(--secondary)/0.6),
-              0 0 12px hsl(var(--secondary)/0.4),
-              0 0 20px hsl(var(--secondary)/0.2);
-  border-color: hsl(var(--secondary)/0.5);
-  /* transform: translateY(-1px); */
+   box-shadow: 0 0 7px hsl(var(--secondary)/0.5),
+              0 0 14px hsl(var(--secondary)/0.35),
+              0 0 22px hsl(var(--secondary)/0.2);
+  border-color: hsl(var(--secondary)/0.4);
 }
 
 
-/* Text glows (mostly for titles/headings) - Softer base */
+/* Text glows (mostly for titles/headings) - Refined for clarity */
 .text-glow-primary {
-  text-shadow: 0 0 5px hsl(var(--primary)/0.5), /* Softer base */
-               0 0 10px hsl(var(--primary)/0.25); /* Wider, fainter glow */
-  transition: text-shadow 0.3s ease-in-out;
+  text-shadow: 0 0 6px hsl(var(--primary)/0.45), /* Slightly increased base spread */
+               0 0 12px hsl(var(--primary)/0.2); /* Wider, fainter outer glow */
+  transition: text-shadow 0.35s ease-in-out;
 }
 .group:hover .text-glow-primary, .text-glow-primary:hover {
-  text-shadow: 0 0 8px hsl(var(--primary)/0.7),
-               0 0 15px hsl(var(--primary)/0.35);
+  text-shadow: 0 0 9px hsl(var(--primary)/0.65),
+               0 0 18px hsl(var(--primary)/0.3);
 }
 
 .text-glow-accent {
-  text-shadow: 0 0 5px hsl(var(--accent)/0.5),
-               0 0 10px hsl(var(--accent)/0.25);
-  transition: text-shadow 0.3s ease-in-out;
+  text-shadow: 0 0 6px hsl(var(--accent)/0.45),
+               0 0 12px hsl(var(--accent)/0.2);
+  transition: text-shadow 0.35s ease-in-out;
 }
 .group:hover .text-glow-accent, .text-glow-accent:hover {
-  text-shadow: 0 0 8px hsl(var(--accent)/0.7),
-               0 0 15px hsl(var(--accent)/0.35);
+  text-shadow: 0 0 9px hsl(var(--accent)/0.65),
+               0 0 18px hsl(var(--accent)/0.3);
 }
 
 .text-glow-secondary {
-  text-shadow: 0 0 5px hsl(var(--secondary)/0.5),
-               0 0 10px hsl(var(--secondary)/0.25);
-  transition: text-shadow 0.3s ease-in-out;
+  text-shadow: 0 0 6px hsl(var(--secondary)/0.45),
+               0 0 12px hsl(var(--secondary)/0.2);
+  transition: text-shadow 0.35s ease-in-out;
 }
 .group:hover .text-glow-secondary, .text-glow-secondary:hover {
-  text-shadow: 0 0 8px hsl(var(--secondary)/0.7),
-               0 0 15px hsl(var(--secondary)/0.35);
+  text-shadow: 0 0 9px hsl(var(--secondary)/0.65),
+               0 0 18px hsl(var(--secondary)/0.3);
 }
 
 
 /* Add subtle animation for loading skeletons */
 @keyframes pulse-bg-themed {
-  0%, 100% { background-color: hsl(var(--muted) / 0.2); } /* Thematic muted color */
-  50% { background-color: hsl(var(--muted) / 0.35); } /* Slightly more intense pulse */
+  0%, 100% { background-color: hsl(var(--muted) / 0.25); } /* Slightly more visible base */
+  50% { background-color: hsl(var(--muted) / 0.4); } /* Slightly more intense pulse */
 }
 
 .animate-pulse-bg {
-  animation: pulse-bg-themed 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-bg-themed 1.7s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* Slightly faster */
+}
+
+/* Ensure inputs and textareas have consistent focus glow */
+input[type="text"]:focus-visible,
+input[type="email"]:focus-visible,
+textarea:focus-visible,
+.select-trigger-class[data-state=open], /* For ShadCN Select */
+.select-trigger-class:focus-visible {
+  @apply ring-2 ring-ring border-primary shadow-md shadow-primary/20 futuristic-glow-primary;
+  /* Or use accent if preferred for forms: ring-accent border-accent shadow-accent/20 futuristic-glow-accent */
+}
+
+.select-item-class[data-state=checked] {
+  @apply font-semibold text-primary; /* Ensure checked select item stands out */
+}
+.select-item-class[data-highlighted] { /* Radix UI's data attribute for focused item */
+  @apply bg-accent/20 text-accent;
+}
+.select-content-class {
+  @apply bg-popover/95 backdrop-blur-md border-border/50; /* Consistent popover styling */
+}
+
+/* Consistent Card styling */
+.card {
+  /* Default card styling is already in globals, this is for additional thematic consistency if needed */
+  /* Example: ensure all cards have a slight backdrop blur if not covered by direct classes */
+  /* backdrop-filter: blur(2px); */
 }

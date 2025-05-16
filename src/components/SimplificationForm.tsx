@@ -30,7 +30,6 @@ import { suggestInputText } from "@/ai/flows/suggest-input-text";
 import { useToast } from "@/hooks/use-toast";
 import type { SimplificationResult } from "@/lib/types";
 
-// Expanded list of languages, including more specific Arabic options
 const languages = [
   { value: "English", label: "English" },
   { value: "Spanish", label: "Spanish" },
@@ -118,11 +117,11 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
       onResult(null, values.text, values.targetLanguage);
       try {
         const result = await simplifyAndTranslate(values);
-        onResult(result, values.text, values.targetLanguage); 
+        onResult(result, values.text, values.targetLanguage);
         toast({
           title: "Process Complete",
           description: "Text successfully simplified and translated.",
-          className: "bg-background border-primary text-foreground futuristic-glow-primary",
+          className: "bg-card border-primary text-card-foreground futuristic-glow-primary",
         });
       } catch (error) {
         console.error("Simplification failed:", error);
@@ -132,7 +131,7 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
           description: "Failed to simplify and translate text. Please try again.",
           className: "bg-destructive border-destructive/50 text-destructive-foreground"
         });
-        onResult(null, values.text, values.targetLanguage); 
+        onResult(null, values.text, values.targetLanguage);
       }
     });
   }
@@ -142,11 +141,11 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
       try {
         const { suggestedText } = await suggestInputText();
         form.setValue("text", suggestedText);
-        form.trigger("text"); 
+        form.trigger("text");
         toast({
           title: "Suggestion Loaded",
           description: "Example text populated.",
-           className: "bg-background border-accent text-foreground futuristic-glow-accent", 
+           className: "bg-card border-accent text-card-foreground futuristic-glow-accent",
         });
       } catch (error) {
         console.error("Suggestion failed:", error);
@@ -161,62 +160,62 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
   }
 
   return (
-    <Card className="w-full bg-card/70 backdrop-blur-sm border-border/50 shadow-xl futuristic-glow-primary transition-all duration-300 hover:shadow-2xl hover:border-primary/70 transform hover:scale-[1.01]">
-      <CardHeader className="text-center pb-4 pt-6">
-        <div className="flex justify-center items-center mb-2">
-            <Wand2 className="h-10 w-10 text-primary text-glow-primary" />
+    <Card className="w-full bg-card/70 backdrop-blur-lg border-border/50 shadow-xl futuristic-glow-primary transition-all duration-300 hover:shadow-2xl hover:border-primary/70 transform hover:scale-[1.015]">
+      <CardHeader className="text-center pb-5 pt-8">
+        <div className="flex justify-center items-center mb-3">
+            <Wand2 className="h-12 w-12 text-primary text-glow-primary" />
         </div>
-        <CardTitle className="text-3xl font-bold text-glow-primary tracking-tight">
+        <CardTitle className="text-3xl md:text-4xl font-bold text-glow-primary tracking-tight">
           Simplify & Translate
         </CardTitle>
-        <CardDescription className="text-muted-foreground pt-1 text-sm">
+        <CardDescription className="text-muted-foreground pt-2 text-md">
             Input your text, choose a language, and witness the AI transformation.
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-6 pb-8 pt-4">
+      <CardContent className="px-6 md:px-8 pb-8 pt-5">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="text"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-foreground/80">Your Text</FormLabel>
+                  <FormLabel className="text-base font-medium text-foreground/90">Your Text</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Paste or type complex text here..."
-                      className="min-h-[160px] resize-y bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-inner placeholder:text-muted-foreground/60 futuristic-glow-primary focus:shadow-md"
+                      className="min-h-[180px] resize-y bg-input border-input-border focus:border-primary focus:ring-2 focus:ring-primary/60 transition-all duration-200 ease-in-out shadow-inner placeholder:text-muted-foreground/60 futuristic-glow-primary focus:shadow-lg p-4 text-base"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="text-destructive/80" />
+                  <FormMessage className="text-destructive/90 pt-1" />
                 </FormItem>
               )}
             />
 
-            <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-5">
               <FormField
                 control={form.control}
                 name="targetLanguage"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel className="text-sm font-medium text-foreground/80">Translate Simplified Text To</FormLabel>
+                    <FormLabel className="text-base font-medium text-foreground/90">Translate Simplified Text To</FormLabel>
                      <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-input border-border/70 focus:border-primary focus:ring-2 focus:ring-primary/50 transition-all duration-200 ease-in-out shadow-sm text-foreground futuristic-glow-primary focus:shadow-md">
-                           <Languages className="mr-2 h-4 w-4 text-primary/70"/>
+                        <SelectTrigger className="bg-input border-input-border focus:border-primary focus:ring-2 focus:ring-primary/60 transition-all duration-200 ease-in-out shadow-sm text-foreground futuristic-glow-primary focus:shadow-md h-12 text-base p-3">
+                           <Languages className="mr-2.5 h-5 w-5 text-primary/80"/>
                           <SelectValue placeholder="Select language" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-popover border-border/70 text-foreground max-h-72">
+                      <SelectContent className="bg-popover border-border/60 text-popover-foreground max-h-80 backdrop-blur-md">
                         {languages.map((lang) => (
-                          <SelectItem key={lang.value} value={lang.value} className="hover:bg-primary/20 focus:bg-primary/30">
+                          <SelectItem key={lang.value} value={lang.value} className="hover:bg-primary/20 focus:bg-primary/30 py-2.5 px-3 text-sm">
                             {lang.label}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage className="text-destructive/80" />
+                    <FormMessage className="text-destructive/90 pt-1" />
                   </FormItem>
                 )}
               />
@@ -225,12 +224,12 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
                 variant="outline"
                 onClick={handleSuggestText}
                 disabled={isSuggesting}
-                className="w-full sm:w-auto transition-all duration-300 ease-in-out border-accent text-accent hover:bg-accent/10 hover:text-accent-foreground hover:border-accent futuristic-glow-accent shadow-md transform hover:scale-105"
+                className="w-full sm:w-auto transition-all duration-300 ease-in-out border-accent text-accent hover:bg-accent/15 hover:text-accent-foreground hover:border-accent/80 futuristic-glow-accent shadow-md transform hover:scale-105 h-12 px-6 text-base"
               >
                 {isSuggesting ? (
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  <Loader2 className="h-5 w-5 animate-spin mr-2.5" />
                 ) : (
-                  <Sparkles className="h-4 w-4 mr-2" />
+                  <Sparkles className="h-5 w-5 mr-2.5" />
                 )}
                 Suggest Text
               </Button>
@@ -239,11 +238,11 @@ export function SimplificationForm({ onResult, initialText = "", initialLanguage
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full text-lg py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 ease-in-out transform hover:scale-[1.02] focus:ring-4 focus:ring-primary/40 shadow-lg futuristic-glow-primary active:shadow-sm active:scale-[1.00]"
+              className="w-full text-lg py-3.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 ease-in-out transform hover:scale-[1.025] focus:ring-4 focus:ring-primary/50 shadow-xl futuristic-glow-primary active:shadow-lg active:scale-[1.01]"
             >
               {isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  <Loader2 className="mr-2.5 h-5 w-5 animate-spin" />
                   Processing...
                 </>
               ) : (
